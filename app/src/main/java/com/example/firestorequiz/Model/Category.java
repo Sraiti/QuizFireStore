@@ -19,9 +19,6 @@ public class Category {
         CategoryImage = categoryImage;
     }
 
-    public Category(Category toObject) {
-
-    }
 
     public int getCategoryId() {
         return CategoryId;

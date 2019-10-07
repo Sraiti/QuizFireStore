@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firestorequiz.Model.Category;
-import com.example.firestorequiz.Questions;
+import com.example.firestorequiz.Quiz;
 import com.example.firestorequiz.R;
 import com.example.firestorequiz.ViewHolders.CategoryViewHolder;
 import com.example.firestorequiz.ViewHolders.UnifiedNativeAdViewHolder;
@@ -21,7 +21,6 @@ import com.google.android.gms.ads.formats.NativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.squareup.picasso.Picasso;
-import androidx.appcompat.app.AppCompatActivity;
 
 
 import java.util.List;
@@ -107,7 +106,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void onClick(View v) {
 
-                        Intent intent2 = new Intent(mContext,Questions.class);
+                        Intent intent2 = new Intent(mContext, Quiz.class);
 
                         intent2.putExtra("CategoryId",menuItem.getCategoryId());
 
