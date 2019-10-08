@@ -1,0 +1,36 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
+    android:layout_height="195dp"
+    android:layout_margin="3dp"
+    android:clickable="true"
+    android:clipToPadding="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="#2979FF"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="1dp"
+    app:cardUseCompatPadding="true">
+
+    <TextView
+        android:id="@+id/txt_StageName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+
+        android:text="Level V"
+        android:textColor="@android:color/white"
+        android:textSize="95sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/img_Stage"
+        android:layout_width="155dp"
+        android:layout_height="155dp"
+        android:layout_gravity="center"
+        android:alpha="0.8" />
+
+
+</androidx.cardview.widget.CardView>

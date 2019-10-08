@@ -13,14 +13,7 @@ import com.example.firestorequiz.R;
 public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
     private View mView;
-
-
     private int CategoryId;
-
-    public int getCategoryId() {
-        return CategoryId;
-    }
-
     public TextView CategoryName;
     public ImageView CategoryImage;
 
@@ -28,12 +21,13 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         CategoryName = itemView.findViewById(R.id.CategoryName);
         CategoryImage = itemView.findViewById(R.id.CategoryImage);
-
-
         mView =itemView;
     }
 
     public View getmView() {
         return mView;
+    }
+    public int getCategoryId() {
+        return CategoryId;
     }
 }

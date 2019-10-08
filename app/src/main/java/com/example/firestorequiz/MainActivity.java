@@ -52,9 +52,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        //RecyclerView recyclerView = findViewById(R.id.Recyclerview);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         if (savedInstanceState == null) {
             // Create new fragment to display a progress spinner while the data set for the

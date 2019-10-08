@@ -43,14 +43,5 @@ public class Category {
     public void setCategoryImage(String categoryImage) {
         CategoryImage = categoryImage;
     }
-    public static ArrayList<Category> createCategoryList(int numProducts) {
 
-        ArrayList<Category> Categories = new ArrayList<Category>();
-
-        for (int i = 1; i <= numProducts; i++) {
-            Categories.add(new Category(i, "Name" + i,"product_image"));
-        }
-
-        return Categories;
-    }
 }
