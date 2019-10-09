@@ -1,6 +1,7 @@
 package com.example.firestorequiz.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firestorequiz.Model.Stage;
+import com.example.firestorequiz.Playing;
+import com.example.firestorequiz.Quiz;
 import com.example.firestorequiz.R;
 import com.example.firestorequiz.ViewHolders.StageViewHolder;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
@@ -28,9 +31,11 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     Context mContext;
     List<Stage> StageDataList;
-    public StageAdapter(List<Stage> studentDataList,Context context) {
+    int CateID;
+    public StageAdapter(List<Stage> studentDataList,Context context,int CategoryID) {
         this.mContext=context;
         this.StageDataList = studentDataList;
+        this.CateID=CategoryID;
     }
     @NonNull
     @Override
@@ -52,7 +57,13 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public long getItemId(int position) {
+
+        return StageDataList.get(position).getStageId();
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder,  int position) {
 
         StageViewHolder stageViewHolder = (StageViewHolder) holder;
 
@@ -70,12 +81,20 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 stageViewHolder.StageImage.setImageResource(ImageResId);
                 break;
             case 1:
-
                 default:
         }
 
 
 
+        final long pos = getItemId(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2 = new Intent(mContext, Playing.class);
+                intent2.putExtra("Level",StageDataList.get((int) pos).getStageId());
+                mContext.startActivity(intent2);
+            }
+        });
 
 
 

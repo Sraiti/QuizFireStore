@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Playing">
+
+    <com.github.florent37.diagonallayout.DiagonalLayout
+        android:id="@+id/diagonalLayout"
+        android:layout_width="0dp"
+        android:layout_height="230dp"
+        android:elevation="10dp"
+        app:diagonal_angle="15"
+        app:diagonal_direction="left"
+        app:diagonal_position="bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/backgrounds/scenic[15]" />
+
+            <io.netopen.hotbitmapgg.library.view.RingProgressBar
+                android:id="@+id/progress_bar_1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="57dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:max="100"
+                app:ringColor="@color/colorPrimary"
+                app:ringProgressColor="@color/colorPrimaryDark"
+                app:ringWidth="8dp"
+                app:style="FILL"
+                app:textColor="@color/colorPrimary"
+                app:textIsShow="true"
+                app:textSize="16sp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.github.florent37.diagonallayout.DiagonalLayout>
+
+
+    <ImageView
+        android:id="@+id/img_try2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="197dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/img_try1"
+        app:layout_constraintStart_toEndOf="@+id/img_try3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/heart" />
+
+    <ImageView
+        android:id="@+id/img_try1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_try3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_try2"
+        app:layout_constraintTop_toTopOf="@+id/img_try3"
+        app:srcCompat="@drawable/heart" />
+
+    <ImageView
+        android:id="@+id/img_try3"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="238dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="7dp"
+        app:layout_constraintEnd_toStartOf="@+id/img_try2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img_try2"
+        app:srcCompat="@drawable/heart" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

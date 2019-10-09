@@ -2,6 +2,7 @@ package com.example.firestorequiz.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,10 +38,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private final List<Object> mRecyclerViewItems;
 
-
     public CategoryAdapter(Context context, List<Object> recyclerViewItems) {
         this.mContext = context;
         this.mRecyclerViewItems = recyclerViewItems;
+
     }
 
     @Override

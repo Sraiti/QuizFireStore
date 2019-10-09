@@ -1,6 +1,8 @@
 package com.example.firestorequiz;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,12 +34,12 @@ import static java.sql.Types.NULL;
 public class Quiz extends AppCompatActivity {
 
 
-    FirebaseFirestore db;
-
-    ArrayList<Question> mQuestions = new ArrayList<>();
 
     ImageView HeaderImage;
      private ArrayList<Stage> StageDataList = new ArrayList<>();
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +49,23 @@ public class Quiz extends AppCompatActivity {
 
         HeaderImage =findViewById(R.id.CategoryImage);
         Intent a = getIntent();
-
-
+        int CategoryID =a.getIntExtra("CategoryId",NULL);
         String ImageURL = a.getStringExtra("ImageURL");
+
+
+
+         sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+
+         editor= sharedPref.edit();
+
+
+        editor.putInt(String.valueOf(R.string.CategoryId_key),CategoryID);
+        editor.putString(String.valueOf(R.string.ImagePath_key),ImageURL);
+        editor.apply();
+
+
+
+
         Picasso.get()
                 .load(ImageURL)
                 .into(HeaderImage);
@@ -67,7 +83,7 @@ public class Quiz extends AppCompatActivity {
 
 
         // Specify an adapter.
-        RecyclerView.Adapter<RecyclerView.ViewHolder> adapter = new StageAdapter(StageDataList,this);
+        RecyclerView.Adapter<RecyclerView.ViewHolder> adapter = new StageAdapter(StageDataList,this,CategoryID);
         recyclerView.setAdapter(adapter);
 
     }
@@ -75,31 +91,6 @@ public class Quiz extends AppCompatActivity {
     private void StageData() {
         StageDataList.addAll(Stage.CreatStages(Quiz.this));
     }
-    public void GetQuestions() {
-        db = FirebaseFirestore.getInstance();
-
-        Intent a = getIntent();
-
-        int id = a.getIntExtra("CategoryId", NULL);
 
 
-        db.collection("Quiz")
-                .whereEqualTo("CategoryId", id)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG", document.getId() + " => " + document.getData());
-                                mQuestions.add(document.toObject(Question.class));
-                            }
-                        } else {
-                            Log.d("TAG", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-
-    }
 }
