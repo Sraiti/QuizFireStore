@@ -3,21 +3,20 @@ package com.example.firestorequiz.Model;
 public class Question {
 
     String Question ;
-    String Answer0,Answer1,Answer2,Answer3;
+    String Answer0, Answer01,Answer02,Answer03;
     String CorrectAnswer;
 
-
-
-    public Question( String question, String answer0, String answer1, String answer2, String answer3, String correctAnswer) {
-
-        Question = question;
-        Answer0 = answer0;
-        Answer1 = answer1;
-        Answer2 = answer2;
-        Answer3 = answer3;
-        CorrectAnswer = correctAnswer;
+    public Question() {
     }
 
+    public Question(String question, String answer0, String answer01, String answer02, String answer03, String correctAnswer) {
+        Question = question;
+        Answer0 = answer0;
+        Answer01 = answer01;
+        Answer02 = answer02;
+        Answer03 = answer03;
+        CorrectAnswer = correctAnswer;
+    }
 
     public String getQuestion() {
         return Question;
@@ -35,28 +34,28 @@ public class Question {
         Answer0 = answer0;
     }
 
-    public String getAnswer1() {
-        return Answer1;
+    public String getAnswer01() {
+        return Answer01;
     }
 
-    public void setAnswer1(String answer1) {
-        Answer1 = answer1;
+    public void setAnswer01(String answer01) {
+        Answer01 = answer01;
     }
 
-    public String getAnswer2() {
-        return Answer2;
+    public String getAnswer02() {
+        return Answer02;
     }
 
-    public void setAnswer2(String answer2) {
-        Answer2 = answer2;
+    public void setAnswer02(String answer02) {
+        Answer02 = answer02;
     }
 
-    public String getAnswer3() {
-        return Answer3;
+    public String getAnswer03() {
+        return Answer03;
     }
 
-    public void setAnswer3(String answer3) {
-        Answer3 = answer3;
+    public void setAnswer03(String answer03) {
+        Answer03 = answer03;
     }
 
     public String getCorrectAnswer() {
@@ -65,8 +64,5 @@ public class Question {
 
     public void setCorrectAnswer(String correctAnswer) {
         CorrectAnswer = correctAnswer;
-    }
-
-    public Question() {
     }
 }
