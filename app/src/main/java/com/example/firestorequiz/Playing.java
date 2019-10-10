@@ -30,6 +30,7 @@ import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 public class Playing extends AppCompatActivity implements View.OnClickListener {
 
+    public ArrayList<Question> mQuestions = new ArrayList<>();
     RingProgressBar mRingProgressBar;
     int progress = 0;
     Handler handler = new Handler() {
@@ -46,33 +47,27 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
         }
     };
-
-
-    FirebaseFirestore db;
-
-    ArrayList<Question> mQuestions = new ArrayList<>();
-
     int index = 0;
     int trys = 3;
     TextView QuestionText;
     Button AnswerA, AnswerB, AnswerC, AnswerD;
     ImageView Heart01, Heart02, Heart03;
 
+    int CategoryID, Stage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playing);
+        QuestionText = findViewById(R.id.txt_Ques);
+        AnswerA = findViewById(R.id.btn_Answer1);
+        AnswerB = findViewById(R.id.btn_Answer02);
+        AnswerC = findViewById(R.id.btn_Answer03);
+        AnswerD = findViewById(R.id.btn_Answer04);
 
-//
-//        QuestionText = findViewById(R.id.txt_Ques);
-//        AnswerA = findViewById(R.id.btn_Answer1);
-//        AnswerB = findViewById(R.id.btn_Answer02);
-//        AnswerC = findViewById(R.id.btn_Answer03);
-//        AnswerD = findViewById(R.id.btn_Answer04);
-
-        Heart01 = findViewById(R.id.img_try1);
-        Heart02 = findViewById(R.id.img_try2);
-        Heart03 = findViewById(R.id.img_try3);
+        Heart01 = findViewById(R.id.img_try3);
+        Heart02 = findViewById(R.id.img_try1);
+        Heart03 = findViewById(R.id.img_try2);
 
         mRingProgressBar = findViewById(R.id.progress_bar_1);
 
@@ -81,73 +76,90 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
         String ImageURL = prefs.getString(String.valueOf(R.string.ImagePath_key), "");
 
-        int CategoryID = prefs.getInt(String.valueOf(R.string.CategoryId_key), 8);
-        int Stage = a.getIntExtra("Level", 8);
+        CategoryID = prefs.getInt(String.valueOf(R.string.CategoryId_key), 8);
+        Stage = a.getIntExtra("Level", 8);
 
-        GetQuestions(CategoryID, Stage);
 
         ImageView Img = findViewById(R.id.imageView);
         Picasso.get()
                 .load(ImageURL)
                 .into(Img);
-        StartTimer();
-        if (index >= mQuestions.size()&&!mQuestions.isEmpty()) {
 
-
-            LoadNextQuestion(index);
-
-
-            mRingProgressBar.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-
-                @Override
-                public void progressToComplete() {
-                    // Progress reaches the maximum callback default Max value is 100
-                    Toast.makeText(Playing.this, "TimeOut", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-        } else {
-
-
-            Toast.makeText(this, "No Questions here", Toast.LENGTH_SHORT).show();
-        }
-
-//        AnswerA.setOnClickListener(this);
-//        AnswerB.setOnClickListener(this);
-//        AnswerC.setOnClickListener(this);
-//        AnswerD.setOnClickListener(this);
-
-    }
-
-    private void LoadNextQuestion(int index) {
-        QuestionText.setText(mQuestions.get(index).getQuestion());
-        AnswerA.setText(mQuestions.get(index).getAnswer0());
-        AnswerB.setText(mQuestions.get(index).getAnswer01());
-        AnswerC.setText(mQuestions.get(index).getAnswer02());
-        AnswerD.setText(mQuestions.get(index).getAnswer03());
-        ++index;
-    }
-
-    public void GetQuestions(int CategoryID, int Stage) {
-
-        db = FirebaseFirestore.getInstance();
-
-        db.collection("Categories").document("Category" + CategoryID)
-                .collection("Stages")
-                .document(String.valueOf(Stage))
-                .collection("Questions")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        GetQuestions(new FireStoreCallback() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.d("TAG", document.getId() + " => " + document.getData());
-                        mQuestions.add(document.toObject(Question.class));
-                    }
-                }
+            public void OnCallBack(ArrayList<Question> List) {
+
+
+                NextQuestion();
             }
         });
 
+        StartTimer();
+
+        mRingProgressBar.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+
+            @Override
+            public void progressToComplete() {
+                // Progress reaches the maximum callback default Max value is 100
+                Toast.makeText(Playing.this, "TimeOut", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        //  Toast.makeText(this, "No Questions here", Toast.LENGTH_SHORT).show();
+
+
+        AnswerA.setOnClickListener(this);
+        AnswerB.setOnClickListener(this);
+        AnswerC.setOnClickListener(this);
+        AnswerD.setOnClickListener(this);
+    }
+
+    public void NextQuestion() {
+
+
+        Question question = (Question) mQuestions.get(index);
+
+        String text = question.getQuestion();
+        String Answer1 = question.getAnswer0();
+        String Answer2 = question.getAnswer01();
+        String Answer3 = question.getAnswer02();
+        String Answer4 = question.getAnswer03();
+
+        QuestionText.setText(text);
+        AnswerA.setText(Answer1);
+        AnswerB.setText(Answer2);
+        AnswerC.setText(Answer3);
+        AnswerD.setText(Answer4);
+
+        index++;
+
+
+    }
+
+
+    public void GetQuestions(final FireStoreCallback callback) {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Questions")
+                .whereEqualTo("categoryID", CategoryID)
+                .whereEqualTo("stage", Stage)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("TAG", document.getId() + " => " + document.getData());
+                                Question Qu = document.toObject(Question.class);
+                                mQuestions.add(Qu);
+                            }
+                        } else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+                        callback.OnCallBack(mQuestions);
+                    }
+                });
 
     }
 
@@ -172,37 +184,42 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         Button btn = (Button) v;
 
         String UserAnswer = String.valueOf(btn.getText());
-        int inde=index;
-        if (index==0) {
-              inde = 0;
-        }else {
+        int inde = index;
+        if (index > 0) {
             --inde;
         }
-        if (UserAnswer == mQuestions.get(inde).getCorrectAnswer()) {
-            StartTimer();
+        if (UserAnswer == ( mQuestions.get(inde)).getCorrectAnswer()) {
 
-            LoadNextQuestion(index);
             //Add points And stuff
+            Toast.makeText(this, "+1", Toast.LENGTH_SHORT).show();
+            StartTimer();
+            NextQuestion();
 
         } else {
-            --trys;
-            switch (trys) {
-                case 2:
+            Toast.makeText(this, "Wrong", Toast.LENGTH_SHORT).show();
+            if (trys > 0) {
+                --trys;
+                if (trys == 2) {
                     Heart01.setVisibility(View.INVISIBLE);
-                    break;
-                case 1:
-                    Heart01.setVisibility(View.INVISIBLE);
+                } else if (trys == 1) {
                     Heart02.setVisibility(View.INVISIBLE);
-                    break;
-                default:
+                } else if (trys == 0) {
+                    Toast.makeText(this, "GameOver", Toast.LENGTH_SHORT).show();
+                }
+                StartTimer();
+                NextQuestion();
+            }else{
+                Toast.makeText(this, "GameOver", Toast.LENGTH_SHORT).show();
             }
-            // points And stuff
-            StartTimer();
-
-            LoadNextQuestion(index);
         }
-        }
+        // points And stuff
+    }
 
-
+    private interface FireStoreCallback {
+        void OnCallBack(ArrayList<Question> List);
+    }
 
 }
+
+
+

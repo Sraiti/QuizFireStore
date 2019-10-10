@@ -63,7 +63,7 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder,  int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
 
         StageViewHolder stageViewHolder = (StageViewHolder) holder;
 
@@ -86,12 +86,11 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
 
-        final long pos = getItemId(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent2 = new Intent(mContext, Playing.class);
-                intent2.putExtra("Level",StageDataList.get((int) pos).getStageId());
+                intent2.putExtra("Level",StageDataList.get(position).getStageId());
                 mContext.startActivity(intent2);
             }
         });

@@ -9,14 +9,17 @@
     <com.github.florent37.diagonallayout.DiagonalLayout
         android:id="@+id/diagonalLayout"
         android:layout_width="0dp"
-        android:layout_height="230dp"
+        android:layout_height="250dp"
         android:elevation="10dp"
+        android:foregroundGravity="top"
         app:diagonal_angle="15"
         app:diagonal_direction="left"
         app:diagonal_position="bottom"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45999998">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -25,7 +28,7 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -58,38 +61,94 @@
     </com.github.florent37.diagonallayout.DiagonalLayout>
 
 
-    <ImageView
-        android:id="@+id/img_try2"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="197dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/img_try1"
-        app:layout_constraintStart_toEndOf="@+id/img_try3"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/heart" />
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        app:layout_constraintTop_toBottomOf="@id/diagonalLayout"
 
-    <ImageView
-        android:id="@+id/img_try1"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/img_try3"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/img_try2"
-        app:layout_constraintTop_toTopOf="@+id/img_try3"
-        app:srcCompat="@drawable/heart" />
+        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <ImageView
-        android:id="@+id/img_try3"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="238dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="7dp"
-        app:layout_constraintEnd_toStartOf="@+id/img_try2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img_try2"
-        app:srcCompat="@drawable/heart" />
+        <ImageView
+            android:id="@+id/img_try2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            app:srcCompat="@drawable/heart" />
+
+        <ImageView
+            android:id="@+id/img_try1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+
+            android:layout_margin="2dp"
+            app:srcCompat="@drawable/heart" />
+
+        <ImageView
+            android:id="@+id/img_try3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="2dp"
+            app:srcCompat="@drawable/heart" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="433dp"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/txt_Ques"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:gravity="center"
+            android:text="TextView"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_Answer1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/btn_Answer02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/btn_Answer03"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/btn_Answer04"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:text="Button" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

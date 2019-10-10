@@ -1,21 +1,23 @@
 package com.example.firestorequiz.Model;
-
 public class Question {
 
-    String Question ;
-    String Answer0, Answer01,Answer02,Answer03;
+    String Question;
+    String Answer0, Answer01, Answer02, Answer03;
     String CorrectAnswer;
+    int CategoryID, Stage;
 
-    public Question() {
-    }
-
-    public Question(String question, String answer0, String answer01, String answer02, String answer03, String correctAnswer) {
+    public Question(String question, String answer0, String answer01, String answer02, String answer03, String correctAnswer, int categoryID, int stage) {
         Question = question;
         Answer0 = answer0;
         Answer01 = answer01;
         Answer02 = answer02;
         Answer03 = answer03;
         CorrectAnswer = correctAnswer;
+        CategoryID = categoryID;
+        Stage = stage;
+    }
+
+    public Question() {
     }
 
     public String getQuestion() {
@@ -64,5 +66,21 @@ public class Question {
 
     public void setCorrectAnswer(String correctAnswer) {
         CorrectAnswer = correctAnswer;
+    }
+
+    public int getCategoryID() {
+        return CategoryID;
+    }
+
+    public void setCategoryID(int categoryID) {
+        CategoryID = categoryID;
+    }
+
+    public int getStage() {
+        return Stage;
+    }
+
+    public void setStage(int stage) {
+        Stage = stage;
     }
 }

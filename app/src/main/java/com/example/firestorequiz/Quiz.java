@@ -76,7 +76,7 @@ public class Quiz extends AppCompatActivity {
        // recyclerView.setHasFixedSize(true);
 
         // Specify a linear layout manager.
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(Quiz.this, 2);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         StageData();
