@@ -119,35 +119,55 @@
 
         <Button
             android:id="@+id/btn_Answer1"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:background="@drawable/mybutton"
             android:padding="10dp"
-            android:text="Button" />
+            android:text="Button"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btn_Answer02"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:background="@drawable/mybutton"
             android:padding="10dp"
-            android:text="Button" />
+            android:text="Button"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btn_Answer03"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:background="@drawable/mybutton"
             android:padding="10dp"
-            android:text="Button" />
+            android:text="Button"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btn_Answer04"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:background="@drawable/mybutton"
             android:padding="10dp"
-            android:text="Button" />
+            android:text="Button"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

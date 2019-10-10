@@ -88,20 +88,21 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         GetQuestions(new FireStoreCallback() {
             @Override
             public void OnCallBack(ArrayList<Question> List) {
-
-
                 NextQuestion();
             }
         });
 
         StartTimer();
 
+        mRingProgressBar.setMax(300);
         mRingProgressBar.setOnProgressListener(new RingProgressBar.OnProgressListener() {
 
             @Override
             public void progressToComplete() {
                 // Progress reaches the maximum callback default Max value is 100
-                Toast.makeText(Playing.this, "TimeOut", Toast.LENGTH_SHORT).show();
+
+                NextQuestion();
+                StartTimer();
             }
         });
 
@@ -169,7 +170,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             public void run() {
                 for (int i = 0; i < 100; i++) {
                     try {
-                        Thread.sleep(250);
+                        Thread.sleep(300);
                         handler.sendEmptyMessage(0);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -188,11 +189,10 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         if (index > 0) {
             --inde;
         }
-        if (UserAnswer == ( mQuestions.get(inde)).getCorrectAnswer()) {
+        if (UserAnswer.equals(mQuestions.get(inde).getCorrectAnswer())){
 
             //Add points And stuff
             Toast.makeText(this, "+1", Toast.LENGTH_SHORT).show();
-            StartTimer();
             NextQuestion();
 
         } else {
@@ -206,7 +206,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                 } else if (trys == 0) {
                     Toast.makeText(this, "GameOver", Toast.LENGTH_SHORT).show();
                 }
-                StartTimer();
                 NextQuestion();
             }else{
                 Toast.makeText(this, "GameOver", Toast.LENGTH_SHORT).show();
