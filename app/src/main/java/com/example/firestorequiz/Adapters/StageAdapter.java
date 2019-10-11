@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -31,11 +33,13 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     Context mContext;
     List<Stage> StageDataList;
+    ProgressBar progressBar;
     int CateID;
-    public StageAdapter(List<Stage> studentDataList,Context context,int CategoryID) {
+    public StageAdapter(List<Stage> studentDataList, Context context, int CategoryID, ProgressBar progressBar) {
         this.mContext=context;
         this.StageDataList = studentDataList;
         this.CateID=CategoryID;
+        this.progressBar=progressBar;
     }
     @NonNull
     @Override
@@ -67,7 +71,6 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         StageViewHolder stageViewHolder = (StageViewHolder) holder;
 
-        int id =getItemViewType(position);
 
 
         stageViewHolder.StageName.setText(StageDataList.get(position).getStageText());
@@ -76,22 +79,31 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
               mContext.getPackageName());
 
 
-        switch (id){
-            case 0 :
+        if(!StageDataList.get(position).isOpen()){
                 stageViewHolder.StageImage.setImageResource(ImageResId);
-                break;
-            case 1:
-                default:
         }
 
+        int opened=0 ;
+        for (int i =0 ;i<9;i++){
+            if (StageDataList.get(position).isOpen()){
+                ++opened;
+            }
+        }
 
-
+        progressBar.setProgress(opened);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent2 = new Intent(mContext, Playing.class);
-                intent2.putExtra("Level",StageDataList.get(position).getStageId());
-                mContext.startActivity(intent2);
+
+                if (StageDataList.get(position).isOpen()){
+                    Intent intent2 = new Intent(mContext, Playing.class);
+                    intent2.putExtra("Level",StageDataList.get(position).getStageId());
+                    mContext.startActivity(intent2);
+                }else{
+                    Toast.makeText(mContext, "You don't have enough points !!", Toast.LENGTH_SHORT).show();
+                }
+
+
             }
         });
 

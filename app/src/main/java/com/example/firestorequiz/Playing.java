@@ -3,8 +3,7 @@ package com.example.firestorequiz;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,55 +24,60 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import io.netopen.hotbitmapgg.library.view.RingProgressBar;
+import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 
 
 public class Playing extends AppCompatActivity implements View.OnClickListener {
 
     public ArrayList<Question> mQuestions = new ArrayList<>();
-    RingProgressBar mRingProgressBar;
-    int progress = 0;
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0) {
 
-                if (progress < 100) {
-                    progress++;
-                    mRingProgressBar.setProgress(progress);
-                }
-            }
 
-        }
-    };
-    int index = 0;
-    int trys = 3;
-    TextView QuestionText;
+    CircularProgressIndicator circularProgress;
+
+
+    TextView QuestionText, TxtScore;
     Button AnswerA, AnswerB, AnswerC, AnswerD;
     ImageView Heart01, Heart02, Heart03;
 
+    CountDownTimer countDownTimer;
+    int ProgressValue = 0;
+    int index = 0, score = 0, totalQues, Souls = 3;
+
+
+    long TIMEOUT =15000; //Integer.parseInt(String.valueOf(R.string.TIMEOUT)); //15s
+    long INTERVAL = 1000;//Integer.parseInt(String.valueOf(R.string.INTERVAL));//1S
+//Integer.parseInt(String.valueOf(R.string.PRIZE))
+    int WinningPrize = 100;
+
     int CategoryID, Stage;
+
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playing);
+
         QuestionText = findViewById(R.id.txt_Ques);
         AnswerA = findViewById(R.id.btn_Answer1);
         AnswerB = findViewById(R.id.btn_Answer02);
         AnswerC = findViewById(R.id.btn_Answer03);
         AnswerD = findViewById(R.id.btn_Answer04);
-
         Heart01 = findViewById(R.id.img_try3);
         Heart02 = findViewById(R.id.img_try1);
         Heart03 = findViewById(R.id.img_try2);
+        circularProgress = findViewById(R.id.circular_progress);
+        TxtScore = findViewById(R.id.txt_Scored);
 
-        mRingProgressBar = findViewById(R.id.progress_bar_1);
-
+        circularProgress.setAnimationEnabled(true);
+        circularProgress.setMaxProgress(15);
 
         Intent a = getIntent();
-        SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
+        prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
+        editor = prefs.edit();
+        editor.apply();
         String ImageURL = prefs.getString(String.valueOf(R.string.ImagePath_key), "");
 
         CategoryID = prefs.getInt(String.valueOf(R.string.CategoryId_key), 8);
@@ -88,27 +92,10 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         GetQuestions(new FireStoreCallback() {
             @Override
             public void OnCallBack(ArrayList<Question> List) {
-                NextQuestion();
+                totalQues = mQuestions.size();
+                NextQuestion(index);
             }
         });
-
-        StartTimer();
-
-        mRingProgressBar.setMax(300);
-        mRingProgressBar.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-
-            @Override
-            public void progressToComplete() {
-                // Progress reaches the maximum callback default Max value is 100
-
-                NextQuestion();
-                StartTimer();
-            }
-        });
-
-
-        //  Toast.makeText(this, "No Questions here", Toast.LENGTH_SHORT).show();
-
 
         AnswerA.setOnClickListener(this);
         AnswerB.setOnClickListener(this);
@@ -116,32 +103,64 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         AnswerD.setOnClickListener(this);
     }
 
-    public void NextQuestion() {
+
+    public void NextQuestion(int index) {
 
 
-        Question question = (Question) mQuestions.get(index);
+        if (index < totalQues) {
 
-        String text = question.getQuestion();
-        String Answer1 = question.getAnswer0();
-        String Answer2 = question.getAnswer01();
-        String Answer3 = question.getAnswer02();
-        String Answer4 = question.getAnswer03();
+            circularProgress.setCurrentProgress(0);
+            ProgressValue = 0;
 
-        QuestionText.setText(text);
-        AnswerA.setText(Answer1);
-        AnswerB.setText(Answer2);
-        AnswerC.setText(Answer3);
-        AnswerD.setText(Answer4);
 
-        index++;
+            Question question = (Question) mQuestions.get(index);
+
+            String text = question.getQuestion();
+            String Answer1 = question.getAnswer0();
+            String Answer2 = question.getAnswer01();
+            String Answer3 = question.getAnswer02();
+            String Answer4 = question.getAnswer03();
+
+            QuestionText.setText(text);
+            AnswerA.setText(Answer1);
+            AnswerB.setText(Answer2);
+            AnswerC.setText(Answer3);
+            AnswerD.setText(Answer4);
+
+            countDownTimer.start();
+
+        } else {
+            Intent done = new Intent(Playing.this, Done.class);
+            done.putExtra("Score", score);
+            countDownTimer.cancel();
+            startActivity(done);
+            finish();
+        }
+    }
+
+    public void points(boolean statue) {
+
+        if (statue) {
+
+            int points = prefs.getInt("Points", 0);
+
+
+            editor.putInt("Points", WinningPrize + points);
+            Toast.makeText(this, "+100", Toast.LENGTH_SHORT).show();
+            editor.apply();
+
+        } else {
+            Toast.makeText(this, "Wrong", Toast.LENGTH_SHORT).show();
+        }
 
 
     }
 
-
     public void GetQuestions(final FireStoreCallback callback) {
 
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         db.collection("Questions")
                 .whereEqualTo("categoryID", CategoryID)
                 .whereEqualTo("stage", Stage)
@@ -159,65 +178,76 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
                         callback.OnCallBack(mQuestions);
+                        totalQues = mQuestions.size();
+
                     }
                 });
-
     }
 
-    public void StartTimer() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 100; i++) {
-                    try {
-                        Thread.sleep(300);
-                        handler.sendEmptyMessage(0);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
-    }
 
     @Override
     public void onClick(View v) {
-        Button btn = (Button) v;
 
-        String UserAnswer = String.valueOf(btn.getText());
-        int inde = index;
-        if (index > 0) {
-            --inde;
-        }
-        if (UserAnswer.equals(mQuestions.get(inde).getCorrectAnswer())){
+        Button ClickedButton = (Button) v;
 
-            //Add points And stuff
-            Toast.makeText(this, "+1", Toast.LENGTH_SHORT).show();
-            NextQuestion();
+        if (ClickedButton.getText().equals(mQuestions.get(index).getCorrectAnswer())) {
 
+            score += 100;
+            points(true);
+            NextQuestion(++index);
         } else {
-            Toast.makeText(this, "Wrong", Toast.LENGTH_SHORT).show();
-            if (trys > 0) {
-                --trys;
-                if (trys == 2) {
-                    Heart01.setVisibility(View.INVISIBLE);
-                } else if (trys == 1) {
-                    Heart02.setVisibility(View.INVISIBLE);
-                } else if (trys == 0) {
-                    Toast.makeText(this, "GameOver", Toast.LENGTH_SHORT).show();
-                }
-                NextQuestion();
-            }else{
-                Toast.makeText(this, "GameOver", Toast.LENGTH_SHORT).show();
+
+            points(false);
+
+            Souls = Souls - 1;
+            if (Souls == 2) {
+                Heart01.setVisibility(View.INVISIBLE);
+            }else if (Souls==1){
+                Heart02.setVisibility(View.INVISIBLE);
             }
+            if (Souls <= 0) {
+                Heart03.setVisibility(View.INVISIBLE);
+                Intent done = new Intent(Playing.this, Done.class);
+                done.putExtra("Score", score);
+                countDownTimer.cancel();
+                startActivity(done);
+                finish();
+            }
+
+            NextQuestion(++index);
+
+
         }
-        // points And stuff
+
+        TxtScore.setText(String.valueOf(score));
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        countDownTimer = new CountDownTimer(TIMEOUT, INTERVAL) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                circularProgress.setCurrentProgress(ProgressValue);
+                ProgressValue++;
+
+            }
+
+            @Override
+            public void onFinish() {
+
+                countDownTimer.cancel();
+                NextQuestion(++index);
+            }
+        };
     }
 
     private interface FireStoreCallback {
         void OnCallBack(ArrayList<Question> List);
     }
-
 }
 
 

@@ -1,30 +1,20 @@
 package com.example.firestorequiz;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.firestorequiz.Adapters.CategoryAdapter;
 import com.example.firestorequiz.Adapters.StageAdapter;
-import com.example.firestorequiz.Model.Question;
 import com.example.firestorequiz.Model.Stage;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,7 +29,7 @@ public class Quiz extends AppCompatActivity {
      private ArrayList<Stage> StageDataList = new ArrayList<>();
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
-
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +42,9 @@ public class Quiz extends AppCompatActivity {
         int CategoryID =a.getIntExtra("CategoryId",NULL);
         String ImageURL = a.getStringExtra("ImageURL");
 
-
-
+        progressBar =findViewById(R.id.progress);
+        progressBar.getProgressDrawable().setColorFilter(
+                Color.RED, PorterDuff.Mode.MULTIPLY);
          sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
          editor= sharedPref.edit();
@@ -78,18 +69,17 @@ public class Quiz extends AppCompatActivity {
         // Specify a linear layout manager.
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         StageData();
 
 
         // Specify an adapter.
-        RecyclerView.Adapter<RecyclerView.ViewHolder> adapter = new StageAdapter(StageDataList,this,CategoryID);
+        RecyclerView.Adapter<RecyclerView.ViewHolder> adapter = new StageAdapter(StageDataList,this,CategoryID,progressBar);
         recyclerView.setAdapter(adapter);
 
     }
 
     private void StageData() {
-        StageDataList.addAll(Stage.CreatStages(Quiz.this));
+        StageDataList.addAll(Stage.CreateStages(Quiz.this));
     }
 
 

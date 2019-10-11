@@ -2,8 +2,21 @@
     <string name="app_name">FireStoreQuiz</string>
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
     <string name="ad_unit_id">ca-app-pub-3940256099942544/8135179316</string>
+    <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="interstitial">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="publisher_id">pub-6560477533466499</string>
+
+    <string name="url_privacy">www.privacy.com</string>
+
     <string name="preference_file_key">Prefer_8135179316</string>
     <string name="ImagePath_key">CategoryImageURL</string>
     <string name="CategoryId_key">CategoryIDINT</string>
+
+    ///TIME MANAGEMENT
+    <string name="INTERVAL">1000</string>
+    <string name="TIMEOUT">15000</string>
+
+    //POINTS
+    <string name="PRIZE">100</string>
 
 </resources>

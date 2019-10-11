@@ -1,18 +1,18 @@
 package com.example.firestorequiz;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firestorequiz.Model.Category;
-import com.example.firestorequiz.ViewHolders.CategoryViewHolder;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
@@ -20,7 +20,6 @@ import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -43,8 +42,11 @@ public class MainActivity extends AppCompatActivity {
     private List<UnifiedNativeAd> mNativeAds = new ArrayList<>();
 
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        if (savedInstanceState == null) {
+
             // Create new fragment to display a progress spinner while the data set for the
 
             // Update the RecyclerView item's list with menu items.
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             loadNativeAds();
             // Update the RecyclerView item's list with native ads.
             //    loadNativeAds();
-        }
+
 
     }
 
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         for (UnifiedNativeAd ad : mNativeAds) {
 
             //Comment this to close the native Ads
-            mRecyclerViewItems.add(index, ad);
+            //mRecyclerViewItems.add(index, ad);
             index = index + 2;
         }
         loadMenu();
@@ -126,8 +128,21 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container, newFragment);
         transaction.addToBackStack(null);
 
+        SpinKitView sp = findViewById(R.id.spinKitView);
+        sp.setVisibility(View.GONE);
         // Commit the transaction
-        transaction.commit();
+        try {
+            transaction.commit();
+
+        }catch(Exception ex){
+            try {
+                transaction.commitAllowingStateLoss();
+
+            }catch(Exception edx){
+                finish();
+            }
+        }
+       // transaction.commit();
     }
 
     private void GetData() {
