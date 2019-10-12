@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         for (UnifiedNativeAd ad : mNativeAds) {
 
             //Comment this to close the native Ads
-            //mRecyclerViewItems.add(index, ad);
+
             index = index + 2;
         }
         loadMenu();

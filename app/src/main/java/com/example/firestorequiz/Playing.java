@@ -25,6 +25,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 
@@ -152,8 +154,17 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             countDownTimer.cancel();
             startActivity(done);
             finish();
+            return;
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        countDownTimer = null;
+    }
+
+
 
     public void points(boolean statue) {
 
@@ -162,7 +173,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             int points = prefs.getInt("Points", 0);
             score += 100;
 
-            editor.putInt("Points", WinningPrize + points);
+            editor.putInt("Points" + CategoryID, WinningPrize + points);
             Toast.makeText(this, "+100", Toast.LENGTH_SHORT).show();
             editor.apply();
 
@@ -195,12 +206,14 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
+                        Collections.shuffle(mQuestions);
                         callback.OnCallBack(mQuestions);
                         totalQues = mQuestions.size();
 
                     }
                 });
     }
+
 
 
     @Override
@@ -243,6 +256,23 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                 done.putExtra("Score", score);
                 startActivity(done);
                 finish();
+                return;
+            }
+
+            final List<Button> Butttons = new ArrayList<>();
+            Butttons.add(AnswerA);
+            Butttons.add(AnswerB);
+            Butttons.add(AnswerC);
+            Butttons.add(AnswerD);
+
+
+            for (int i = 0; i < Butttons.size(); i++) {
+
+                if (Butttons.get(i).getText().equals(mQuestions.get(index).getCorrectAnswer())) {
+                    Butttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
+                    break;
+                }
+
             }
 
             ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttonwrong));
@@ -252,7 +282,11 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybutton));
+
+                    for (int i = 0; i < Butttons.size(); i++) {
+                        Butttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybutton));
+                    }
+
                     NextQuestion(++index);
                 }
             }, 950);

@@ -27,6 +27,7 @@ public class Quiz extends AppCompatActivity {
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
     ProgressBar progressBar;
+    int CategoryID;
     private ArrayList<Stage> StageDataList = new ArrayList<>();
 
     @Override
@@ -37,7 +38,7 @@ public class Quiz extends AppCompatActivity {
 
         HeaderImage = findViewById(R.id.CategoryImage);
         Intent a = getIntent();
-        int CategoryID = a.getIntExtra("CategoryId", NULL);
+        CategoryID = a.getIntExtra("CategoryId", NULL);
         String ImageURL = a.getStringExtra("ImageURL");
 
         progressBar = findViewById(R.id.progress);
@@ -75,7 +76,7 @@ public class Quiz extends AppCompatActivity {
     }
 
     private void StageData() {
-        StageDataList.addAll(Stage.CreateStages(Quiz.this));
+        StageDataList.addAll(Stage.CreateStages(Quiz.this, CategoryID));
     }
 
 

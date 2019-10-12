@@ -119,7 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:gravity="center"
-            android:text="TextView"
+            android:text="Question"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -131,7 +131,6 @@
             android:layout_margin="8dp"
             android:background="@drawable/mybutton"
             android:padding="10dp"
-            android:text="Button"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textSize="18sp" />
@@ -144,7 +143,6 @@
             android:layout_margin="8dp"
             android:background="@drawable/mybutton"
             android:padding="10dp"
-            android:text="Button"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textSize="18sp" />
@@ -157,7 +155,6 @@
             android:layout_margin="8dp"
             android:background="@drawable/mybutton"
             android:padding="10dp"
-            android:text="Button"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textSize="18sp" />
@@ -175,7 +172,6 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/mybutton"
             android:padding="10dp"
-            android:text="Button"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textSize="18sp" />

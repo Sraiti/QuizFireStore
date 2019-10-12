@@ -28,13 +28,13 @@ public class Stage {
         this.isOpen = isOpen;
     }
 
-    public static ArrayList<Stage> CreateStages(Context context) {
+    public static ArrayList<Stage> CreateStages(Context context, int CategoryID) {
         ArrayList<Stage> Stages = new ArrayList<>();
 
         SharedPreferences prefs;
         prefs = context.getSharedPreferences("MyPref", MODE_PRIVATE);
 
-        int points = prefs.getInt("Points", 0);
+        int points = prefs.getInt("Points" + CategoryID, 0);
 
 
         Stages.add(new Stage(1, RomanNumerals(1), "lock", true));
