@@ -3,6 +3,8 @@ package com.example.firestorequiz.Model;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.firestorequiz.Constant.FinalValues;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,53 +40,53 @@ public class Stage {
         Stages.add(new Stage(1, RomanNumerals(1), "lock", true));
 
 
-        if (points >= 600) {
+        if (points >= FinalValues.Stage2) {
             Stages.add(new Stage(2, RomanNumerals(2), "lock", true));
-        }else{
+        } else {
             Stages.add(new Stage(2, RomanNumerals(2), "lock", false));
         }
-        if (points >= 1200) {
+        if (points >= FinalValues.Stage3) {
             Stages.add(new Stage(3, RomanNumerals(3), "lock", true));
-        }else{
+        } else {
             Stages.add(new Stage(3, RomanNumerals(3), "lock", false));
         }
-        if (points >= 1800) {
+        if (points >= FinalValues.Stage4) {
             Stages.add(new Stage(4, RomanNumerals(4), "lock", true));
-        }else{
+        } else {
             Stages.add(new Stage(4, RomanNumerals(4), "lock", false));
         }
-        if (points >= 2400) {
+        if (points >= FinalValues.Stage5) {
             Stages.add(new Stage(5, RomanNumerals(5), "lock", true));
-        }else{
+        } else {
             Stages.add(new Stage(5, RomanNumerals(5), "lock", false));
         }
-        if (points >= 3000) {
+        if (points >= FinalValues.Stage6) {
             Stages.add(new Stage(6, RomanNumerals(6), "lock", true));
-        }else{
+        } else {
             Stages.add(new Stage(6, RomanNumerals(6), "lock", false));
         }
-        if (points >= 3600) {
+        if (points >= FinalValues.Stage7) {
             Stages.add(new Stage(7, RomanNumerals(7), "lock", true));
-        }else{
+        } else {
             Stages.add(new Stage(7, RomanNumerals(7), "lock", false));
         }
-        if (points >= 4200) {
+        if (points >= FinalValues.Stage8) {
             Stages.add(new Stage(8, RomanNumerals(8), "lock", true));
-        }else{
+        } else {
             Stages.add(new Stage(8, RomanNumerals(8), "lock", false));
         }
-        if (points >= 4800) {
+        if (points >= FinalValues.Stage9) {
             Stages.add(new Stage(9, RomanNumerals(9), "lock", true));
-        }else{
+        } else {
             Stages.add(new Stage(9, RomanNumerals(9), "lock", false));
         }
-        if (points >= 5400) {
+        if (points >= FinalValues.Stage10) {
             Stages.add(new Stage(10, RomanNumerals(10), "lock", true));
-        }else{
+        } else {
             Stages.add(new Stage(10, RomanNumerals(10), "lock", false));
         }
 
-            return Stages;
+        return Stages;
     }
 
     ///Roman Numbers

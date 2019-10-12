@@ -1,10 +1,8 @@
 package com.example.firestorequiz;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
 
 
     public static final int NUMBER_OF_ADS = 3;
@@ -54,15 +51,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        // Create new fragment to display a progress spinner while the data set for the
 
-
-            // Create new fragment to display a progress spinner while the data set for the
-
-            // Update the RecyclerView item's list with menu items.
-            GetData();
-            loadNativeAds();
-            // Update the RecyclerView item's list with native ads.
-            //    loadNativeAds();
+        // Update the RecyclerView item's list with menu items.
+        GetData();
+        loadNativeAds();
+        // Update the RecyclerView item's list with native ads.
+        //    loadNativeAds();
 
 
     }
@@ -95,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 }).build();
 
         // Load the Native ads.
-       adLoader.loadAds(new AdRequest.Builder().build(), NUMBER_OF_ADS);
+        adLoader.loadAds(new AdRequest.Builder().build(), NUMBER_OF_ADS);
     }
 
     public List<Object> getRecyclerViewItems() {
@@ -134,15 +129,15 @@ public class MainActivity extends AppCompatActivity {
         try {
             transaction.commit();
 
-        }catch(Exception ex){
+        } catch (Exception ex) {
             try {
                 transaction.commitAllowingStateLoss();
 
-            }catch(Exception edx){
+            } catch (Exception edx) {
                 finish();
             }
         }
-       // transaction.commit();
+        // transaction.commit();
     }
 
     private void GetData() {

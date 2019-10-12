@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.Model.Question;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -44,16 +46,26 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     int index = 0, score = 0, totalQues, Souls = 3;
 
 
-    long TIMEOUT =15000; //Integer.parseInt(String.valueOf(R.string.TIMEOUT)); //15s
-    long INTERVAL = 1000;//Integer.parseInt(String.valueOf(R.string.INTERVAL));//1S
-//Integer.parseInt(String.valueOf(R.string.PRIZE))
-    int WinningPrize = 100;
+    long TIMEOUT = FinalValues.TIMEOUT;
+    long INTERVAL = FinalValues.INTERVAL;
+     int WinningPrize = FinalValues.WinningPrize;
 
     int CategoryID, Stage;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+//Just In case
+        countDownTimer.cancel();
+        Intent A = new Intent(Playing.this, Home.class);
+        startActivity(A);
+        finish();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +113,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         AnswerB.setOnClickListener(this);
         AnswerC.setOnClickListener(this);
         AnswerD.setOnClickListener(this);
+
     }
 
 
@@ -108,12 +121,16 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
 
         if (index < totalQues) {
+            AnswerA.setClickable(true);
+            AnswerB.setClickable(true);
+            AnswerC.setClickable(true);
+            AnswerD.setClickable(true);
 
             circularProgress.setCurrentProgress(0);
             ProgressValue = 0;
 
 
-            Question question = (Question) mQuestions.get(index);
+            Question question = mQuestions.get(index);
 
             String text = question.getQuestion();
             String Answer1 = question.getAnswer0();
@@ -143,11 +160,12 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         if (statue) {
 
             int points = prefs.getInt("Points", 0);
-
+            score += 100;
 
             editor.putInt("Points", WinningPrize + points);
             Toast.makeText(this, "+100", Toast.LENGTH_SHORT).show();
             editor.apply();
+
 
         } else {
             Toast.makeText(this, "Wrong", Toast.LENGTH_SHORT).show();
@@ -188,40 +206,67 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        Button ClickedButton = (Button) v;
+        final Button ClickedButton = (Button) v;
 
+        AnswerA.setClickable(false);
+        AnswerB.setClickable(false);
+        AnswerC.setClickable(false);
+        AnswerD.setClickable(false);
         if (ClickedButton.getText().equals(mQuestions.get(index).getCorrectAnswer())) {
 
-            score += 100;
+
+            countDownTimer.cancel();
+            ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
+
             points(true);
-            NextQuestion(++index);
+
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybutton));
+                    NextQuestion(++index);
+                }
+            }, 1000);
+
+
         } else {
 
-            points(false);
-
             Souls = Souls - 1;
-            if (Souls == 2) {
-                Heart01.setVisibility(View.INVISIBLE);
-            }else if (Souls==1){
-                Heart02.setVisibility(View.INVISIBLE);
-            }
+            countDownTimer.cancel();
+
             if (Souls <= 0) {
                 Heart03.setVisibility(View.INVISIBLE);
+                countDownTimer.cancel();
                 Intent done = new Intent(Playing.this, Done.class);
                 done.putExtra("Score", score);
-                countDownTimer.cancel();
                 startActivity(done);
                 finish();
             }
 
-            NextQuestion(++index);
+            ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttonwrong));
+            points(false);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybutton));
+                    NextQuestion(++index);
+                }
+            }, 950);
 
 
+            if (Souls == 2) {
+                Heart01.setVisibility(View.INVISIBLE);
+            } else if (Souls == 1) {
+                Heart02.setVisibility(View.INVISIBLE);
+            }
         }
-
         TxtScore.setText(String.valueOf(score));
-
     }
+
 
     @Override
     protected void onResume() {
@@ -233,12 +278,18 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             public void onTick(long millisUntilFinished) {
                 circularProgress.setCurrentProgress(ProgressValue);
                 ProgressValue++;
-
             }
 
             @Override
             public void onFinish() {
+                if (++index > totalQues) {
+                    Toast.makeText(Playing.this, "Finished", Toast.LENGTH_SHORT).show();
+                    countDownTimer.cancel();
 
+
+                } else {
+                    Toast.makeText(Playing.this, "TimeOut", Toast.LENGTH_SHORT).show();
+                }
                 countDownTimer.cancel();
                 NextQuestion(++index);
             }

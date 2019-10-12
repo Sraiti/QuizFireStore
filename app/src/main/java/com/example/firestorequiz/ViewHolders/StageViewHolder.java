@@ -12,18 +12,18 @@ import com.example.firestorequiz.R;
 public class StageViewHolder extends RecyclerView.ViewHolder {
 
 
+    public TextView StageName;
+    public ImageView StageImage;
     private View mView;
     private int StageId;
-    public TextView StageName;
-    public ImageView StageImage ;
 
 
     public StageViewHolder(@NonNull View itemView) {
         super(itemView);
 
-        StageName=itemView.findViewById(R.id.txt_StageName);
-        StageImage=itemView.findViewById(R.id.img_Stage);
-        mView =itemView;
+        StageName = itemView.findViewById(R.id.txt_StageName);
+        StageImage = itemView.findViewById(R.id.img_Stage);
+        mView = itemView;
 
 
     }

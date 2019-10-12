@@ -1,4 +1,5 @@
 package com.example.firestorequiz.Model;
+
 public class Question {
 
     String Question;

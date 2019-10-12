@@ -9,12 +9,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.firestorequiz.Adapters.StageAdapter;
 import com.example.firestorequiz.Model.Stage;
-
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -24,37 +23,34 @@ import static java.sql.Types.NULL;
 public class Quiz extends AppCompatActivity {
 
 
-
     ImageView HeaderImage;
-     private ArrayList<Stage> StageDataList = new ArrayList<>();
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
     ProgressBar progressBar;
+    private ArrayList<Stage> StageDataList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-      //  GetQuestions();
+        //  GetQuestions();
 
-        HeaderImage =findViewById(R.id.CategoryImage);
+        HeaderImage = findViewById(R.id.CategoryImage);
         Intent a = getIntent();
-        int CategoryID =a.getIntExtra("CategoryId",NULL);
+        int CategoryID = a.getIntExtra("CategoryId", NULL);
         String ImageURL = a.getStringExtra("ImageURL");
 
-        progressBar =findViewById(R.id.progress);
+        progressBar = findViewById(R.id.progress);
         progressBar.getProgressDrawable().setColorFilter(
                 Color.RED, PorterDuff.Mode.MULTIPLY);
-         sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
-         editor= sharedPref.edit();
+        editor = sharedPref.edit();
 
 
-        editor.putInt(String.valueOf(R.string.CategoryId_key),CategoryID);
-        editor.putString(String.valueOf(R.string.ImagePath_key),ImageURL);
+        editor.putInt(String.valueOf(R.string.CategoryId_key), CategoryID);
+        editor.putString(String.valueOf(R.string.ImagePath_key), ImageURL);
         editor.apply();
-
-
 
 
         Picasso.get()
@@ -62,9 +58,9 @@ public class Quiz extends AppCompatActivity {
                 .into(HeaderImage);
 
 
-        RecyclerView   recyclerView = findViewById(R.id.recycler);
+        RecyclerView recyclerView = findViewById(R.id.recycler);
 
-       // recyclerView.setHasFixedSize(true);
+        // recyclerView.setHasFixedSize(true);
 
         // Specify a linear layout manager.
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -73,7 +69,7 @@ public class Quiz extends AppCompatActivity {
 
 
         // Specify an adapter.
-        RecyclerView.Adapter<RecyclerView.ViewHolder> adapter = new StageAdapter(StageDataList,this,CategoryID,progressBar);
+        RecyclerView.Adapter<RecyclerView.ViewHolder> adapter = new StageAdapter(StageDataList, this, CategoryID, progressBar);
         recyclerView.setAdapter(adapter);
 
     }

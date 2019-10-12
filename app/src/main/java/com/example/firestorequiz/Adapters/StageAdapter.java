@@ -2,27 +2,19 @@ package com.example.firestorequiz.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firestorequiz.Model.Stage;
 import com.example.firestorequiz.Playing;
-import com.example.firestorequiz.Quiz;
 import com.example.firestorequiz.R;
 import com.example.firestorequiz.ViewHolders.StageViewHolder;
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -30,17 +22,18 @@ import java.util.List;
 public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-
     Context mContext;
     List<Stage> StageDataList;
     ProgressBar progressBar;
     int CateID;
+
     public StageAdapter(List<Stage> studentDataList, Context context, int CategoryID, ProgressBar progressBar) {
-        this.mContext=context;
+        this.mContext = context;
         this.StageDataList = studentDataList;
-        this.CateID=CategoryID;
-        this.progressBar=progressBar;
+        this.CateID = CategoryID;
+        this.progressBar = progressBar;
     }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -72,20 +65,19 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         StageViewHolder stageViewHolder = (StageViewHolder) holder;
 
 
-
         stageViewHolder.StageName.setText(StageDataList.get(position).getStageText());
 
         int ImageResId = mContext.getResources().getIdentifier("lock", "drawable",
-              mContext.getPackageName());
+                mContext.getPackageName());
 
 
-        if(!StageDataList.get(position).isOpen()){
-                stageViewHolder.StageImage.setImageResource(ImageResId);
+        if (!StageDataList.get(position).isOpen()) {
+            stageViewHolder.StageImage.setImageResource(ImageResId);
         }
 
-        int opened=0 ;
-        for (int i =0 ;i<9;i++){
-            if (StageDataList.get(position).isOpen()){
+        int opened = 0;
+        for (int i = 0; i < 9; i++) {
+            if (StageDataList.get(position).isOpen()) {
                 ++opened;
             }
         }
@@ -95,18 +87,17 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             @Override
             public void onClick(View v) {
 
-                if (StageDataList.get(position).isOpen()){
+                if (StageDataList.get(position).isOpen()) {
                     Intent intent2 = new Intent(mContext, Playing.class);
-                    intent2.putExtra("Level",StageDataList.get(position).getStageId());
+                    intent2.putExtra("Level", StageDataList.get(position).getStageId());
                     mContext.startActivity(intent2);
-                }else{
+                } else {
                     Toast.makeText(mContext, "You don't have enough points !!", Toast.LENGTH_SHORT).show();
                 }
 
 
             }
         });
-
 
 
     }
@@ -116,7 +107,6 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public int getItemCount() {
         return StageDataList.size();
     }
-
 
 
 }

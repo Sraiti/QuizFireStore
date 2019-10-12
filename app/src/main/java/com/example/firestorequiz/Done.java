@@ -1,17 +1,28 @@
 package com.example.firestorequiz;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.firestorequiz.Constant.FinalValues;
 
 public class Done extends AppCompatActivity {
 
 
     TextView txt_DoneScore;
-    SharedPreferences prefs;
+    ImageView Share, Home;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent A = new Intent(Done.this, Home.class);
+        startActivity(A);
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,13 +31,34 @@ public class Done extends AppCompatActivity {
 
 
         txt_DoneScore = findViewById(R.id.txt_doneScore);
+        Share = findViewById(R.id.img_share);
+        Home = findViewById(R.id.img_home);
+
+        Share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_SUBJECT, FinalValues.ShareText);
+                i.putExtra(Intent.EXTRA_TEXT, FinalValues.AppUrl);
+                startActivity(i);
+            }
+        });
+
+
+        Home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent A = new Intent(Done.this, Home.class);
+                startActivity(A);
+                finish();
+            }
+        });
         Intent a = getIntent();
 
-
-        prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
-        int point = a.getIntExtra("Score",0);
-        int pointsAll = prefs.getInt("Points", 0);
-        txt_DoneScore.setText(point);
+        int point = a.getIntExtra("Score", 0);
+        txt_DoneScore.setText(" " + point);
 
 
     }

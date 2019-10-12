@@ -1,13 +1,10 @@
 package com.example.firestorequiz.Model;
 
-import java.util.ArrayList;
-
 public class Category {
 
 
-
     private int CategoryId;
-    private String CategoryName ;
+    private String CategoryName;
     private String CategoryImage;
 
     public Category() {

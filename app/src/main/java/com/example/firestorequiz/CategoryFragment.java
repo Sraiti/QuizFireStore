@@ -1,11 +1,9 @@
 package com.example.firestorequiz;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.firestorequiz.Adapters.CategoryAdapter;
 
 import java.util.List;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class CategoryFragment extends Fragment {
 

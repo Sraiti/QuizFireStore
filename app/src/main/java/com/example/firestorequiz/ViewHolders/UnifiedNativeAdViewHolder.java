@@ -8,7 +8,7 @@ import com.example.firestorequiz.R;
 import com.google.android.gms.ads.formats.MediaView;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 
-public class UnifiedNativeAdViewHolder extends RecyclerView.ViewHolder{
+public class UnifiedNativeAdViewHolder extends RecyclerView.ViewHolder {
     private UnifiedNativeAdView adView;
 
     public UnifiedNativeAdViewHolder(View view) {

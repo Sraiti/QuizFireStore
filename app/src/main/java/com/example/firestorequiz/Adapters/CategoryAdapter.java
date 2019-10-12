@@ -2,7 +2,6 @@ package com.example.firestorequiz.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +22,9 @@ import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.squareup.picasso.Picasso;
 
-
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     // A menu item view type.
@@ -109,8 +107,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                         Intent intent2 = new Intent(mContext, Quiz.class);
 
-                        intent2.putExtra("CategoryId",menuItem.getCategoryId());
-                        intent2.putExtra("ImageURL",menuItem.getCategoryImage());
+                        intent2.putExtra("CategoryId", menuItem.getCategoryId());
+                        intent2.putExtra("ImageURL", menuItem.getCategoryImage());
 
 
                         mContext.startActivity(intent2);
@@ -169,7 +167,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         // Assign native ad object to the native view.
         adView.setNativeAd(nativeAd);
     }
-
 
 
 }
