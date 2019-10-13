@@ -17,7 +17,8 @@ public class Home extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
+        finishAffinity();
+        System.exit(0);
     }
 
     @Override

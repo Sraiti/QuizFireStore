@@ -325,7 +325,8 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                     Toast.makeText(Playing.this, "TimeOut", Toast.LENGTH_SHORT).show();
                 }
                 countDownTimer.cancel();
-                NextQuestion(++index);
+                if (countDownTimer != null)
+                    NextQuestion(++index);
             }
         };
     }
