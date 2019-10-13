@@ -8,6 +8,6 @@ android:shape="rectangle" >
 
 <stroke
     android:width="2px"
-    android:color="#ffffff" />
+    android:color="@color/flatui_sun_flower" />
 
 </shape>
