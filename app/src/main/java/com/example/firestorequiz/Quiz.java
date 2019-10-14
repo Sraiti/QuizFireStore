@@ -28,6 +28,7 @@ public class Quiz extends AppCompatActivity {
     SharedPreferences.Editor editor;
     ProgressBar progressBar;
     int CategoryID;
+    String CategoryName;
     private ArrayList<Stage> StageDataList = new ArrayList<>();
 
     @Override
@@ -39,6 +40,7 @@ public class Quiz extends AppCompatActivity {
         HeaderImage = findViewById(R.id.CategoryImage);
         Intent a = getIntent();
         CategoryID = a.getIntExtra("CategoryId", NULL);
+        CategoryName = a.getStringExtra("CategoryName");
         String ImageURL = a.getStringExtra("ImageURL");
 
         progressBar = findViewById(R.id.progress);
@@ -50,6 +52,7 @@ public class Quiz extends AppCompatActivity {
 
 
         editor.putInt(String.valueOf(R.string.CategoryId_key), CategoryID);
+        editor.putString(String.valueOf(R.string.CategoryName_key), CategoryName);
         editor.putString(String.valueOf(R.string.ImagePath_key), ImageURL);
         editor.apply();
 

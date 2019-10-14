@@ -11,7 +11,7 @@
     card_view:cardElevation="@dimen/cardview_default_elevation" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/relativeLayout"
+        android:id="@+id/Constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -27,7 +27,7 @@
             tools:srcCompat="@tools:sample/backgrounds/scenic[15]" />
 
         <TextView
-            android:id="@+id/CategoryName"
+            android:id="@+id/CategoryName_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Category Name"

@@ -6,6 +6,8 @@ public class Category {
     private int CategoryId;
     private String CategoryName;
     private String CategoryImage;
+    private int CategoryPoints;
+
 
     public Category() {
     }
@@ -14,6 +16,13 @@ public class Category {
         CategoryId = categoryId;
         CategoryName = categoryName;
         CategoryImage = categoryImage;
+    }
+
+    public Category(int categoryId, String categoryName, String categoryImage, int CategoryPoints) {
+        CategoryId = categoryId;
+        CategoryName = categoryName;
+        CategoryImage = categoryImage;
+        this.CategoryPoints = CategoryPoints;
     }
 
 
@@ -40,5 +49,14 @@ public class Category {
     public void setCategoryImage(String categoryImage) {
         CategoryImage = categoryImage;
     }
+
+    public int getCategoryPoints() {
+        return CategoryPoints;
+    }
+
+    public void setCategoryPoints(int categoryPoints) {
+        CategoryPoints = categoryPoints;
+    }
+
 
 }

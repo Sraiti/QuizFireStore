@@ -1,15 +1,13 @@
 package com.example.firestorequiz.Model;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.example.firestorequiz.Constant.FinalValues;
+import com.example.firestorequiz.DB.CategoryDbHelper;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class Stage {
 
@@ -31,10 +29,13 @@ public class Stage {
     public static ArrayList<Stage> CreateStages(Context context, int CategoryID) {
         ArrayList<Stage> Stages = new ArrayList<>();
 
-        SharedPreferences prefs;
-        prefs = context.getSharedPreferences("MyPref", MODE_PRIVATE);
 
-        int points = prefs.getInt("Points" + CategoryID, 0);
+        CategoryDbHelper categoryDbHelper = new CategoryDbHelper(context);
+//        SharedPreferences prefs;
+//        prefs = context.getSharedPreferences("MyPref", MODE_PRIVATE);
+
+        int points = categoryDbHelper.getPoints(CategoryID);
+
 
 
         Stages.add(new Stage(1, RomanNumerals(1), "lock", true));

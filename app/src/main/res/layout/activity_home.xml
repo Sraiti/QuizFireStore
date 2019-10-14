@@ -54,14 +54,14 @@
             app:srcCompat="@drawable/ic_stars_black_24dp" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/img_score"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_show_chart_black_24dp" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/img_settings"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"

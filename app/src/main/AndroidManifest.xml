@@ -14,13 +14,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ScoreBoard" />
         <activity
             android:name=".Done"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home"
-            android:screenOrientation="portrait">
-         </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Splash"
             android:screenOrientation="portrait">
@@ -43,6 +43,7 @@
             android:value="@string/admob_app_id" />
 
         <activity android:name=".MainActivity" />
+
     </application>
 
 </manifest>

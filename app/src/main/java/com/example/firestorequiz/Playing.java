@@ -2,6 +2,7 @@ package com.example.firestorequiz;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -16,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firestorequiz.Constant.FinalValues;
+import com.example.firestorequiz.DB.CategoryDbHelper;
+import com.example.firestorequiz.Model.Category;
 import com.example.firestorequiz.Model.Question;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,7 +41,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
     CircularProgressIndicator circularProgress;
 
-
     TextView QuestionText, TxtScore;
     Button AnswerA, AnswerB, AnswerC, AnswerD;
     ImageView Heart01, Heart02, Heart03;
@@ -47,21 +49,23 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     int ProgressValue = 0;
     int index = 0, score = 0, totalQues, Souls = 3;
 
-
     long TIMEOUT = FinalValues.TIMEOUT;
     long INTERVAL = FinalValues.INTERVAL;
-     int WinningPrize = FinalValues.WinningPrize;
+    int WinningPrize = FinalValues.WinningPrize;
 
     int CategoryID, Stage;
+    String CategoryName, ImageURL;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
+    CategoryDbHelper categoryDbHelper;
 
+    MediaPlayer Correct, Wrong;
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//Just In case
+        //Just In case
         countDownTimer.cancel();
         Intent A = new Intent(Playing.this, Home.class);
         startActivity(A);
@@ -85,6 +89,10 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         circularProgress = findViewById(R.id.circular_progress);
         TxtScore = findViewById(R.id.txt_Scored);
 
+
+        Correct = MediaPlayer.create(Playing.this, R.raw.correct);
+        Wrong = MediaPlayer.create(Playing.this, R.raw.wrong);
+
         circularProgress.setAnimationEnabled(true);
         circularProgress.setMaxProgress(15);
 
@@ -92,11 +100,13 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = prefs.edit();
         editor.apply();
-        String ImageURL = prefs.getString(String.valueOf(R.string.ImagePath_key), "");
-
+        ImageURL = prefs.getString(String.valueOf(R.string.ImagePath_key), "");
+        CategoryName = prefs.getString(String.valueOf(R.string.CategoryName_key), "");
         CategoryID = prefs.getInt(String.valueOf(R.string.CategoryId_key), 8);
         Stage = a.getIntExtra("Level", 8);
 
+
+        categoryDbHelper = new CategoryDbHelper(this);
 
         ImageView Img = findViewById(R.id.imageView);
         Picasso.get()
@@ -165,17 +175,21 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     }
 
 
-
     public void points(boolean statue) {
 
         if (statue) {
 
-            int points = prefs.getInt("Points", 0);
-            score += 100;
 
-            editor.putInt("Points" + CategoryID, WinningPrize + points);
-            Toast.makeText(this, "+100", Toast.LENGTH_SHORT).show();
-            editor.apply();
+            //get points from db
+            int points = categoryDbHelper.getPoints(CategoryID);
+            //Add new points
+            score += 100;
+            //update db points
+            Category cat = new Category(CategoryID, CategoryName, ImageURL);
+            categoryDbHelper.AddPoints(cat, WinningPrize + points);
+            //wont change
+            Toast.makeText(this, FinalValues.CorrectToastMessage, Toast.LENGTH_SHORT).show();
+            //Discarded
 
 
         } else {
@@ -215,7 +229,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     }
 
 
-
     @Override
     public void onClick(View v) {
 
@@ -226,6 +239,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         AnswerC.setClickable(false);
         AnswerD.setClickable(false);
         if (ClickedButton.getText().equals(mQuestions.get(index).getCorrectAnswer())) {
+            Correct.start();
 
 
             countDownTimer.cancel();
@@ -245,9 +259,11 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
 
         } else {
+            Wrong.start();
 
             Souls = Souls - 1;
             countDownTimer.cancel();
+            points(false);
 
             if (Souls <= 0) {
                 Heart03.setVisibility(View.INVISIBLE);
@@ -276,7 +292,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             }
 
             ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttonwrong));
-            points(false);
 
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -299,6 +314,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             }
         }
         TxtScore.setText(String.valueOf(score));
+
     }
 
 
@@ -322,7 +338,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
 
                 } else {
-                    Toast.makeText(Playing.this, "TimeOut", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Playing.this, FinalValues.TIMEOUT_MESSAGE, Toast.LENGTH_SHORT).show();
                 }
                 countDownTimer.cancel();
                 if (countDownTimer != null)

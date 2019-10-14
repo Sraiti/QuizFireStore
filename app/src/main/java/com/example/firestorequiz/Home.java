@@ -1,6 +1,7 @@
 package com.example.firestorequiz;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -13,14 +14,16 @@ import com.example.firestorequiz.Constant.FinalValues;
 public class Home extends AppCompatActivity {
 
 
-    ImageView Play, More, Share;
+    ImageView Play, More, Share, ScoreBoard, Settings;
 
+    public static MediaPlayer MainTheme;
     @Override
     public void onBackPressed() {
         finishAffinity();
         System.exit(0);
     }
 
+    final Intent music = new Intent();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +31,22 @@ public class Home extends AppCompatActivity {
 
         Play = findViewById(R.id.img_Play);
         More = findViewById(R.id.img_more);
+        ScoreBoard = findViewById(R.id.img_score);
+        Settings = findViewById(R.id.img_settings);
+        MainTheme = MediaPlayer.create(getApplicationContext(), R.raw.main_music);
+        MainTheme.start();
+
+
+        ScoreBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent a = new Intent(Home.this, ScoreBoard.class);
+                startActivity(a);
+            }
+        });
+
+
         More.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +76,13 @@ public class Home extends AppCompatActivity {
                 Intent a = new Intent(Home.this, MainActivity.class);
                 startActivity(a);
             }
+        });
+
+        Settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+
         });
 
     }

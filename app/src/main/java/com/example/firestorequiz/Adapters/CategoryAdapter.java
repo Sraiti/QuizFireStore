@@ -108,6 +108,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         Intent intent2 = new Intent(mContext, Quiz.class);
 
                         intent2.putExtra("CategoryId", menuItem.getCategoryId());
+                        intent2.putExtra("CategoryName", menuItem.getCategoryName());
                         intent2.putExtra("ImageURL", menuItem.getCategoryImage());
 
 

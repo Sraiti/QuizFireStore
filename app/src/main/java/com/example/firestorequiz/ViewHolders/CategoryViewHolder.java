@@ -19,7 +19,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
     public CategoryViewHolder(@NonNull View itemView) {
         super(itemView);
-        CategoryName = itemView.findViewById(R.id.CategoryName);
+        CategoryName = itemView.findViewById(R.id.CategoryName_score);
         CategoryImage = itemView.findViewById(R.id.CategoryImage);
         mView = itemView;
     }
