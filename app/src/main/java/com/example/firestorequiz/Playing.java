@@ -132,6 +132,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     public void NextQuestion(int index) {
 
 
+
         if (index < totalQues) {
             AnswerA.setClickable(true);
             AnswerB.setClickable(true);
@@ -255,7 +256,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                     ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybutton));
                     NextQuestion(++index);
                 }
-            }, 1000);
+            }, 3000);
 
 
         } else {
@@ -288,14 +289,13 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                     for (int i = 0; i < Butttons.size(); i++) {
 
                         if (Butttons.get(i).getText().equals(mQuestions.get(index).getCorrectAnswer())) {
-
                             Butttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
                             break;
                         }
 
                     }
                 }
-            }, 500);
+            }, 1000);
 
             ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttonwrong));
 
@@ -310,7 +310,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
                     NextQuestion(++index);
                 }
-            }, 1200);
+            }, 3000);
 
 
             if (Souls == 2) {
