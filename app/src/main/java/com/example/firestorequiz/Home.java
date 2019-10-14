@@ -23,7 +23,6 @@ public class Home extends AppCompatActivity {
         System.exit(0);
     }
 
-    final Intent music = new Intent();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
