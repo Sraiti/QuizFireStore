@@ -26,6 +26,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Home.MainTheme.start();
+    }
 
     public static final int NUMBER_OF_ADS = 3;
 

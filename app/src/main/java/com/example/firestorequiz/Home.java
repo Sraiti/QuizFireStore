@@ -24,6 +24,26 @@ public class Home extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        MainTheme.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MainTheme.release();
+        MainTheme = null;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainTheme.start();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);

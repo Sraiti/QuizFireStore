@@ -281,19 +281,25 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             Butttons.add(AnswerC);
             Butttons.add(AnswerD);
 
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < Butttons.size(); i++) {
 
-            for (int i = 0; i < Butttons.size(); i++) {
+                        if (Butttons.get(i).getText().equals(mQuestions.get(index).getCorrectAnswer())) {
 
-                if (Butttons.get(i).getText().equals(mQuestions.get(index).getCorrectAnswer())) {
-                    Butttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
-                    break;
+                            Butttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
+                            break;
+                        }
+
+                    }
                 }
-
-            }
+            }, 500);
 
             ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttonwrong));
 
-            Handler handler = new Handler();
+
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -304,7 +310,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
                     NextQuestion(++index);
                 }
-            }, 950);
+            }, 1200);
 
 
             if (Souls == 2) {
