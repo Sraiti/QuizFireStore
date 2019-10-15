@@ -1,22 +1,25 @@
 package com.example.firestorequiz;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firestorequiz.Constant.FinalValues;
+import com.example.firestorequiz.Services.BackgroundMusic;
 
 public class Home extends AppCompatActivity {
 
 
-    ImageView Play, More, Share, ScoreBoard, Settings;
+    ImageView Play, More, Share, ScoreBoard;
+    Switch Settings;
 
-    public static MediaPlayer MainTheme;
+
     @Override
     public void onBackPressed() {
         finishAffinity();
@@ -27,20 +30,24 @@ public class Home extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        MainTheme.pause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MainTheme.release();
-        MainTheme = null;
+        Intent myService = new Intent(Home.this, BackgroundMusic.class);
+        stopService(myService);
+
     }
+
+    private boolean mIsBound = false;
+    private BackgroundMusic mServ;
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        MainTheme.start();
     }
 
     @Override
@@ -52,8 +59,9 @@ public class Home extends AppCompatActivity {
         More = findViewById(R.id.img_more);
         ScoreBoard = findViewById(R.id.img_score);
         Settings = findViewById(R.id.img_settings);
-        MainTheme = MediaPlayer.create(getApplicationContext(), R.raw.main_music);
-        MainTheme.start();
+
+        Intent music = new Intent(this, BackgroundMusic.class);
+        startService(music);
 
 
         ScoreBoard.setOnClickListener(new View.OnClickListener() {
@@ -97,11 +105,18 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        Settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
+        Settings.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                if (isChecked) {
+                    Intent myService = new Intent(Home.this, BackgroundMusic.class);
+                    startService(myService);
+                } else {
+                    Intent myService = new Intent(Home.this, BackgroundMusic.class);
+                    stopService(myService);
+
+                }
+            }
         });
 
     }
