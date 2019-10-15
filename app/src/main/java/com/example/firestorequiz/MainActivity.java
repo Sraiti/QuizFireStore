@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        player = MediaPlayerPresenter.getInstance(getApplicationContext());
+        player = MediaPlayerPresenter.getInstance(MainActivity.this);
         // Create new fragment to display a progress spinner while the data set for the
 
         // Update the RecyclerView item's list with menu items.

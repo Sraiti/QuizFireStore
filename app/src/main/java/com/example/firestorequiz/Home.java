@@ -53,7 +53,7 @@ public class Home extends AppCompatActivity {
         Settings = findViewById(R.id.img_settings);
         Settings.setImageResource(R.drawable.ic_volume_up_black_24dp);
 
-        player = MediaPlayerPresenter.getInstance(getApplicationContext());
+        player = MediaPlayerPresenter.getInstance(Home.this);
         player.playMusic();
 
         ScoreBoard.setOnClickListener(new View.OnClickListener() {

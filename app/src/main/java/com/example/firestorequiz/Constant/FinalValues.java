@@ -18,7 +18,6 @@ public class FinalValues {
     public static long Stage8 = 4200;
     public static long Stage9 = 4800;
     public static long Stage10 = 5400;
-
     ///Your Store Url just Change the Id
     public static String StoreUrl = "https://play.google.com/store/apps/developer?id=" + "Instagram";
     //Your AppUrl Change The ID

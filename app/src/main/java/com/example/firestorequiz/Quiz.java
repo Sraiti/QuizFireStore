@@ -46,7 +46,7 @@ public class Quiz extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
         //  GetQuestions();
 
-        player = MediaPlayerPresenter.getInstance(getApplicationContext());
+        player = MediaPlayerPresenter.getInstance(Quiz.this);
 
         HeaderImage = findViewById(R.id.CategoryImage);
         Intent a = getIntent();

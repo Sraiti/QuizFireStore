@@ -50,7 +50,7 @@ public class Done extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_done);
 
-        player = MediaPlayerPresenter.getInstance(getApplicationContext());
+        player = MediaPlayerPresenter.getInstance(Done.this);
 
         txt_DoneScore = findViewById(R.id.txt_doneScore);
         Share = findViewById(R.id.img_share);

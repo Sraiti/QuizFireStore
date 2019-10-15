@@ -98,7 +98,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playing);
-        player = MediaPlayerPresenter.getInstance(getApplicationContext());
+        player = MediaPlayerPresenter.getInstance(Playing.this);
 
         QuestionText = findViewById(R.id.txt_Ques);
         AnswerA = findViewById(R.id.btn_Answer1);

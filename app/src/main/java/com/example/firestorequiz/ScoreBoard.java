@@ -21,7 +21,7 @@ public class ScoreBoard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_board);
 
-        player = MediaPlayerPresenter.getInstance(getApplicationContext());
+        player = MediaPlayerPresenter.getInstance(ScoreBoard.this);
 
 
         CategoryDbHelper dbHelper = new CategoryDbHelper(this);
