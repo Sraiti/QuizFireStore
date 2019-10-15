@@ -47,7 +47,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
         scoreViewHolder.CategoryName.setText(CategoriesList.get(position).getCategoryName());
-        scoreViewHolder.Score.setText(String.valueOf(CategoriesList.get(position).getCategoryPoints()));
+        scoreViewHolder.Score.setText(String.valueOf(CategoriesList.get(position).getCategoryPoints() + 100));
 
 
     }

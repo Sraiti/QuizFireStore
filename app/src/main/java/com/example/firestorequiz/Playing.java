@@ -179,7 +179,12 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             AnswerC.setText(Answer3);
             AnswerD.setText(Answer4);
 
-            countDownTimer.start();
+            try {
+                countDownTimer.start();
+
+            } catch (Exception Ex) {
+                countDownTimer = null;
+            }
 
         } else {
             Intent done = new Intent(Playing.this, Done.class);
@@ -201,8 +206,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     public void points(boolean statue) {
 
         if (statue) {
-
-
             //get points from db
             int points = categoryDbHelper.getPoints(CategoryID);
             //Add new points
