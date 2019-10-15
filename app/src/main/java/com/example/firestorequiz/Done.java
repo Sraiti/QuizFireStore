@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firestorequiz.Constant.FinalValues;
+import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 
 public class Done extends AppCompatActivity {
 
@@ -24,11 +25,32 @@ public class Done extends AppCompatActivity {
         finish();
     }
 
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        player.pauseMusic();
+    }
+
+    MediaPlayerPresenter player;
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            player.playMusic();
+
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_done);
 
+        player = MediaPlayerPresenter.getInstance(getApplicationContext());
 
         txt_DoneScore = findViewById(R.id.txt_doneScore);
         Share = findViewById(R.id.img_share);

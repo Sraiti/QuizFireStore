@@ -44,7 +44,6 @@
 
         <activity android:name=".MainActivity" />
 
-        <service android:name=".Services.BackgroundMusic" />
     </application>
 
 </manifest>

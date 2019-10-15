@@ -4,50 +4,42 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firestorequiz.Constant.FinalValues;
-import com.example.firestorequiz.Services.BackgroundMusic;
+import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 
 public class Home extends AppCompatActivity {
 
 
     ImageView Play, More, Share, ScoreBoard;
-    Switch Settings;
+    ImageView Settings;
 
+    MediaPlayerPresenter player;
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            player.playMusic();
+
+        }
+
+    }
     @Override
     public void onBackPressed() {
         finishAffinity();
         System.exit(0);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-    }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Intent myService = new Intent(Home.this, BackgroundMusic.class);
-        stopService(myService);
-
-    }
-
-    private boolean mIsBound = false;
-    private BackgroundMusic mServ;
-
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        player.pauseMusic();
     }
 
     @Override
@@ -59,10 +51,10 @@ public class Home extends AppCompatActivity {
         More = findViewById(R.id.img_more);
         ScoreBoard = findViewById(R.id.img_score);
         Settings = findViewById(R.id.img_settings);
+        Settings.setImageResource(R.drawable.ic_volume_up_black_24dp);
 
-        Intent music = new Intent(this, BackgroundMusic.class);
-        startService(music);
-
+        player = MediaPlayerPresenter.getInstance(getApplicationContext());
+        player.playMusic();
 
         ScoreBoard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,19 +97,24 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        Settings.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked) {
-                    Intent myService = new Intent(Home.this, BackgroundMusic.class);
-                    startService(myService);
+        Settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (player.isPlaying()) {
+                    Settings.setImageResource(R.drawable.ic_volume_off_black_24dp);
+
+                    player.pauseMusic();
+
                 } else {
-                    Intent myService = new Intent(Home.this, BackgroundMusic.class);
-                    stopService(myService);
+                    Settings.setImageResource(R.drawable.ic_volume_up_black_24dp);
+
+                    player.playMusic();
 
                 }
             }
         });
 
     }
+
 }

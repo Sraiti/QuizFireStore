@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firestorequiz.Adapters.StageAdapter;
 import com.example.firestorequiz.Model.Stage;
+import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,12 +31,22 @@ public class Quiz extends AppCompatActivity {
     int CategoryID;
     String CategoryName;
     private ArrayList<Stage> StageDataList = new ArrayList<>();
+    MediaPlayerPresenter player;
+
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        player.pauseMusic();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
         //  GetQuestions();
+
+        player = MediaPlayerPresenter.getInstance(getApplicationContext());
 
         HeaderImage = findViewById(R.id.CategoryImage);
         Intent a = getIntent();
@@ -83,4 +94,14 @@ public class Quiz extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            player.playMusic();
+
+        }
+
+    }
 }

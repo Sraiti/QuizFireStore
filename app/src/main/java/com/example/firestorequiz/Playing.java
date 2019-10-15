@@ -20,6 +20,7 @@ import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.DB.CategoryDbHelper;
 import com.example.firestorequiz.Model.Category;
 import com.example.firestorequiz.Model.Question;
+import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -62,6 +63,19 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
     MediaPlayer Correct, Wrong;
 
+    MediaPlayerPresenter player;
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            player.playMusic();
+
+        }
+
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -74,9 +88,17 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     }
 
     @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        player.pauseMusic();
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playing);
+        player = MediaPlayerPresenter.getInstance(getApplicationContext());
 
         QuestionText = findViewById(R.id.txt_Ques);
         AnswerA = findViewById(R.id.btn_Answer1);

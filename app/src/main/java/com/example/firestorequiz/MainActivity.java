@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.firestorequiz.Model.Category;
+import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
@@ -45,12 +46,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        player.pauseMusic();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
+        player = MediaPlayerPresenter.getInstance(getApplicationContext());
         // Create new fragment to display a progress spinner while the data set for the
 
         // Update the RecyclerView item's list with menu items.
@@ -168,5 +177,18 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    MediaPlayerPresenter player;
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            player.playMusic();
+
+        }
+
     }
 }
