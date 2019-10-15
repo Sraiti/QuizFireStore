@@ -8,6 +8,8 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -264,87 +266,118 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         AnswerB.setClickable(false);
         AnswerC.setClickable(false);
         AnswerD.setClickable(false);
-        if (ClickedButton.getText().equals(mQuestions.get(index).getCorrectAnswer())) {
-            Correct.start();
 
 
-            countDownTimer.cancel();
-            ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
+        ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttonpanding));
 
-            points(true);
+        Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(250); //You can manage the blinking time with this parameter
+        anim.setStartOffset(20);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setRepeatCount(4);
+        ClickedButton.startAnimation(anim);
 
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
 
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybutton));
-                    NextQuestion(++index);
-                }
-            }, 3000);
-
-
-        } else {
-            Wrong.start();
-
-            Souls = Souls - 1;
-            countDownTimer.cancel();
-            points(false);
-
-            if (Souls <= 0) {
-                Heart03.setVisibility(View.INVISIBLE);
-                countDownTimer.cancel();
-                Intent done = new Intent(Playing.this, Done.class);
-                done.putExtra("Score", score);
-                startActivity(done);
-                finish();
-                return;
             }
 
-            final List<Button> Butttons = new ArrayList<>();
-            Butttons.add(AnswerA);
-            Butttons.add(AnswerB);
-            Butttons.add(AnswerC);
-            Butttons.add(AnswerD);
+            @Override
+            public void onAnimationEnd(Animation animation) {
 
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    for (int i = 0; i < Butttons.size(); i++) {
 
-                        if (Butttons.get(i).getText().equals(mQuestions.get(index).getCorrectAnswer())) {
-                            Butttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
-                            break;
+                if (ClickedButton.getText().equals(mQuestions.get(index).getCorrectAnswer())) {
+                    Correct.start();
+
+
+                    countDownTimer.cancel();
+                    ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
+
+                    points(true);
+
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybutton));
+                            ClickedButton.clearAnimation();
+                            NextQuestion(++index);
                         }
+                    }, 3000);
 
+
+                } else {
+                    Wrong.start();
+
+                    Souls = Souls - 1;
+                    countDownTimer.cancel();
+                    points(false);
+
+                    if (Souls <= 0) {
+                        Heart03.setVisibility(View.INVISIBLE);
+                        countDownTimer.cancel();
+                        Intent done = new Intent(Playing.this, Done.class);
+                        done.putExtra("Score", score);
+                        startActivity(done);
+                        finish();
+                        return;
+                    }
+
+                    final List<Button> Butttons = new ArrayList<>();
+                    Butttons.add(AnswerA);
+                    Butttons.add(AnswerB);
+                    Butttons.add(AnswerC);
+                    Butttons.add(AnswerD);
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < Butttons.size(); i++) {
+
+                                if (Butttons.get(i).getText().equals(mQuestions.get(index).getCorrectAnswer())) {
+                                    Butttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
+                                    break;
+                                }
+
+                            }
+                        }
+                    }, 1000);
+
+                    ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttonwrong));
+
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            for (int i = 0; i < Butttons.size(); i++) {
+                                Butttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybutton));
+                            }
+
+                            NextQuestion(++index);
+                        }
+                    }, 3000);
+
+
+                    if (Souls == 2) {
+                        Heart01.setVisibility(View.INVISIBLE);
+                    } else if (Souls == 1) {
+                        Heart02.setVisibility(View.INVISIBLE);
                     }
                 }
-            }, 1000);
+                TxtScore.setText(String.valueOf(score));
 
-            ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttonwrong));
-
-
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    for (int i = 0; i < Butttons.size(); i++) {
-                        Butttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybutton));
                     }
 
-                    NextQuestion(++index);
-                }
-            }, 3000);
+            @Override
+            public void onAnimationRepeat(Animation animation) {
 
-
-            if (Souls == 2) {
-                Heart01.setVisibility(View.INVISIBLE);
-            } else if (Souls == 1) {
-                Heart02.setVisibility(View.INVISIBLE);
             }
-        }
-        TxtScore.setText(String.valueOf(score));
+        });
+
 
     }
 
