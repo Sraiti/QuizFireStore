@@ -18,11 +18,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.firestorequiz.Ads.ConsentSDK;
 import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.DB.CategoryDbHelper;
 import com.example.firestorequiz.Model.Category;
 import com.example.firestorequiz.Model.Question;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -67,6 +70,9 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
     MediaPlayerPresenter player;
 
+    private AdView adView;
+    private ConsentSDK consentSDK;
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -100,6 +106,19 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playing);
+
+        MobileAds.initialize(this,
+                getString(R.string.app_id));
+        consentSDK = new ConsentSDK.Builder(this)
+                .addPrivacyPolicy(getString(R.string.url_privacy)) // Add your privacy policy url
+                .addPublisherId(getString(R.string.publisher_id)) // Add your admob publisher id
+                .build();
+        consentSDK.checkConsent(new ConsentSDK.ConsentCallback() {
+            @Override
+            public void onResult(boolean isRequestLocationInEeaOrUnknown) {
+
+            }
+        });
         player = MediaPlayerPresenter.getInstance(Playing.this);
 
         QuestionText = findViewById(R.id.txt_Ques);
@@ -149,6 +168,9 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         AnswerB.setOnClickListener(this);
         AnswerC.setOnClickListener(this);
         AnswerD.setOnClickListener(this);
+
+        adView = findViewById(R.id.adView);
+        adView.loadAd(consentSDK.getAdRequest(this));
 
     }
 
