@@ -8,7 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import com.example.firestorequiz.Contracts.CategoryContract.CategoryTable;
+import com.example.firestorequiz.Contracts.StageContract.StageTable;
+
 import com.example.firestorequiz.Model.Category;
+import com.example.firestorequiz.Model.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +32,23 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         this.db = db;
-        String Query = "Create TABLE " + CategoryTable.TableName + "( " +
+        String QueryCategory = "Create TABLE " + CategoryTable.TableName + "( " +
                 CategoryTable.CategoryID + " INTEGER PRIMARY KEY, " +
                 CategoryTable.CategoryName + " TEXT, " +
                 CategoryTable.CategoryImage + " TEXT, " +
                 CategoryTable.CategoryPoints + " INTEGER " +
                 ")";
-        db.execSQL(Query);
+
+        String QueryStage = "Create TABLE " + StageTable.TableName + "( " +
+                StageTable._ID + " INTEGER PRIMARY KEY, " +
+                StageTable.CategoryID + " INTEGER , " +
+                StageTable.StageID + " INTEGER , " +
+                StageTable.SatgePoints + " INTEGER, " +
+                StageTable.IsOpen + " INTEGER " +
+                ")";
+        db.execSQL(QueryCategory);
+        db.execSQL(QueryStage);
+
     }
 
     @Override
@@ -95,7 +108,7 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
     public void AddPoints(Category Category, int Point) {
 
         db = getReadableDatabase();
-        String QuerygetPoints = "SELECT " + CategoryTable.CategoryPoints +
+        String QuerygetPoints = "SELECT  " + CategoryTable.CategoryPoints +
                 " FROM " + CategoryTable.TableName +
                 " Where " + CategoryTable.CategoryID + "=" + Category.getCategoryId() + ";";
 
@@ -135,15 +148,72 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
         return categoryList;
     }
 
+    public int getsatgeState(int StageId,int CategoryId) {
 
-    public void AddOrUpdateStage(int stageid,int CategoryId,int Points){
+        db = getReadableDatabase();
+        int State = 0;
+        String QuerygetStatue = "SELECT  " + StageTable.IsOpen +
+                " FROM " + StageTable.TableName +
+                " Where " + StageTable.CategoryID + "=" + CategoryId + " and "+
+                StageTable.StageID+"=" +StageId +";";
+        Cursor c = db.rawQuery(QuerygetStatue, null);
 
+        if (c.moveToFirst()) {
+            State = c.getInt(c.getColumnIndex(CategoryTable.CategoryPoints));
+            c.close();
+            return State;
+        }
+
+        return State;
 
     }
-    public int getsatgeState(int SatgeId,int CategoryId) {
 
+    public void AddStage(Stage stage) {
 
+        db = getReadableDatabase();
+        String QuerygetStatue = "SELECT  " + StageTable.IsOpen +
+                " FROM " + StageTable.TableName +
+                " Where " + StageTable.CategoryID + "=" + stage.getCategoryID() + " and "+
+                StageTable.StageID+"=" +stage.getStageId() +";";
+        Cursor c = db.rawQuery(QuerygetStatue, null);
 
+        if (c.moveToFirst()) {
+            UpdateStageStatue(stage);
+        } else if (!c.moveToFirst()) {
+            InsertStageStatue(stage);
+        }
+        c.close();
 
     }
+
+    private void InsertStageStatue(Stage stage) {
+
+        String InertQuery =
+                "INSERT INTO " + StageTable.TableName + "(" +
+                        StageTable.CategoryID + "," +
+                        StageTable.StageID + "," +
+                        StageTable.SatgePoints + "," +
+                        StageTable.IsOpen + ")" +
+                        " VALUES(" + stage.getCategoryID() + ",'" +
+                        stage.getStageId() + "','" +
+                        stage.getPoints() + "'," +
+                        1 + ")";
+
+        db.execSQL(InertQuery);
+
+    }
+
+    private void UpdateStageStatue(Stage stage) {
+        String UpdateQuery =
+                "UPDATE " + StageTable.TableName + " SET " +
+                        StageTable.SatgePoints + " = " +
+                        StageTable.SatgePoints +
+                        "+" + stage.getPoints() +
+                        "\n WHERE  " + StageTable.CategoryID + "=" + stage.getCategoryID() +
+                          " and "+StageTable.StageID +"="+stage.getStageId() +";";
+
+        db.execSQL(UpdateQuery);
+        
+    }
+
 }

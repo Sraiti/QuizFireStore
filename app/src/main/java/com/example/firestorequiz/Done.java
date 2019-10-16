@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.DB.CategoryDbHelper;
+import com.example.firestorequiz.Model.Stage;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 import com.shreyaspatil.MaterialDialog.MaterialDialog;
 import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
@@ -67,39 +68,11 @@ public class Done extends AppCompatActivity {
         final int Stage = a.getIntExtra("Stage", 8);
         int CategoryID = a.getIntExtra("CategoryID", 8);
 
-        int UserTotalpoints = categoryDbHelper.getPoints(CategoryID);
 
         int StageRequir = GetStageRequ(1 + Stage);
 
-        if (UserTotalpoints >= StageRequir) {
-            MaterialDialog mDialog = new MaterialDialog.Builder(this)
-                    .setTitle("Next Stage Is Unlocked ")
-                    .setMessage("Play It NOW !!")
-                    .setCancelable(false)
-                    .setPositiveButton("Play", R.drawable.ic_stars_black_24dp, new MaterialDialog.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int which) {
-                            Intent intent2 = new Intent(Done.this, Playing.class);
-                            intent2.putExtra("Level", 1 + Stage);
-                            startActivity(intent2);
-                            finish();
-                        }
-                    })
-                    .setNegativeButton("Go home", R.drawable.ic_home_blacktiny_24dp, new MaterialDialog.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int which) {
-                            Intent a = new Intent(Done.this, MainActivity.class);
-                            startActivity(a);
-                            finish();
-                            dialogInterface.dismiss();
-                        }
-                    })
-                    .setAnimation(R.raw.unlocking)
-                    .setCancelable(true)
-                    .build();
-
-            // Show Dialog
-            mDialog.show();
+        if (point >= StageRequir) {
+            categoryDbHelper.AddStage(new Stage(Stage,CategoryID,point,1));
         }
 
 

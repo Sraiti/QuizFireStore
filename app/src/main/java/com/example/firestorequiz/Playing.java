@@ -13,7 +13,6 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,12 +21,16 @@ import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.DB.CategoryDbHelper;
 import com.example.firestorequiz.Model.Category;
 import com.example.firestorequiz.Model.Question;
+import com.example.firestorequiz.Model.Stage;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.shreyaspatil.MaterialDialog.MaterialDialog;
+import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
+import com.shreyaspatil.MaterialDialog.interfaces.OnDismissListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -156,7 +159,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     public void NextQuestion(int index) {
 
 
-
         if (index < totalQues) {
             AnswerA.setClickable(true);
             AnswerB.setClickable(true);
@@ -209,6 +211,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
     public void points(boolean statue) {
 
+
         if (statue) {
             //get points from db
             int points = categoryDbHelper.getPoints(CategoryID);
@@ -221,9 +224,66 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             //Toast.makeText(this, FinalValues.CorrectToastMessage, Toast.LENGTH_SHORT).show();
             //Discarded
 
+            int StageRequir = GetStageRequ(1 + Stage);
+
+            if (score == StageRequir) {
+                countDownTimer=null;
+                MaterialDialog mDialog = new MaterialDialog.Builder(this)
+                        .setTitle("Next Stage Is Unlocked ")
+                        .setMessage("Play It NOW !!")
+                        .setCancelable(false)
+                        .setPositiveButton("Play", R.drawable.ic_stars_black_24dp, new MaterialDialog.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int which) {
+                                categoryDbHelper.AddStage(new Stage(Stage, CategoryID, score, 1));
+                                Intent intent2 = new Intent(Playing.this, Playing.class);
+                                intent2.putExtra("Level", 1 + Stage);
+                                startActivity(intent2);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Keep Playing", R.drawable.ic_arrow_back_black_24dp, new MaterialDialog.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int which) {
+
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .setAnimation(R.raw.unlocking)
+                        .setCancelable(true)
+                        .build();
+
+                mDialog.setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        onResume();
+                    }
+                });
+                // Show Dialog
+                mDialog.show();
+            }
 
         } else {
-            //Toast.makeText(this, "Wrong", Toast.LENGTH_SHORT).show();
+            Souls = Souls - 1;
+
+            if (Souls <= 0) {
+                Heart03.setVisibility(View.INVISIBLE);
+                countDownTimer.cancel();
+                Intent done = new Intent(Playing.this, Done.class);
+                done.putExtra("Score", score);
+                done.putExtra("CategoryID", CategoryID);
+                done.putExtra("Stage", Stage);
+                startActivity(done);
+                finish();
+                return;
+            }
+
+            if (Souls == 2) {
+                Heart01.setVisibility(View.INVISIBLE);
+            } else if (Souls == 1) {
+                Heart02.setVisibility(View.INVISIBLE);
+            }
+
         }
 
 
@@ -303,7 +363,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybutton));
+                            ClickedButton.setBackground(getResources().getDrawable(R.drawable.button_background));
                             ClickedButton.clearAnimation();
                             NextQuestion(++index);
                         }
@@ -313,21 +373,9 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                 } else {
                     Wrong.start();
 
-                    Souls = Souls - 1;
                     countDownTimer.cancel();
                     points(false);
 
-                    if (Souls <= 0) {
-                        Heart03.setVisibility(View.INVISIBLE);
-                        countDownTimer.cancel();
-                        Intent done = new Intent(Playing.this, Done.class);
-                        done.putExtra("Score", score);
-                        done.putExtra("CategoryID", CategoryID);
-                        done.putExtra("Stage", Stage);
-                        startActivity(done);
-                        finish();
-                        return;
-                    }
 
                     final List<Button> Butttons = new ArrayList<>();
                     Butttons.add(AnswerA);
@@ -366,15 +414,10 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                     }, 3000);
 
 
-                    if (Souls == 2) {
-                        Heart01.setVisibility(View.INVISIBLE);
-                    } else if (Souls == 1) {
-                        Heart02.setVisibility(View.INVISIBLE);
-                    }
                 }
                 TxtScore.setText(String.valueOf(score));
 
-                    }
+            }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
@@ -401,18 +444,46 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onFinish() {
                 if (++index > totalQues) {
-                   // Toast.makeText(Playing.this, "Finished", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(Playing.this, "Finished", Toast.LENGTH_SHORT).show();
                     countDownTimer.cancel();
-
+                    points(false);
 
                 } else {
                     //Toast.makeText(Playing.this, FinalValues.TIMEOUT_MESSAGE, Toast.LENGTH_SHORT).show();
                 }
-                countDownTimer.cancel();
-                if (countDownTimer != null)
+                if (countDownTimer != null) {
+                    countDownTimer.cancel();
                     NextQuestion(++index);
+
+                }
             }
         };
+    }
+
+    public int GetStageRequ(int StageID) {
+        switch (StageID) {
+            case 1:
+                return FinalValues.Stage2;
+            case 2:
+                return FinalValues.Stage3;
+            case 3:
+                return FinalValues.Stage4;
+            case 4:
+                return FinalValues.Stage5;
+            case 5:
+                return FinalValues.Stage6;
+            case 6:
+                return FinalValues.Stage7;
+            case 7:
+                return FinalValues.Stage8;
+            case 8:
+                return FinalValues.Stage9;
+            case 9:
+                return FinalValues.Stage10;
+            default:
+                break;
+        }
+        return 0;
     }
 
     private interface FireStoreCallback {

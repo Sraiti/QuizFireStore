@@ -9,15 +9,15 @@ public class FinalValues {
     ///How Many points Gain For every Correct Question
     public static int WinningPrize = 100;
     //How Many points is required to open each stage
-    public static int Stage2 = 600;
-    public static int Stage3 = 1200;
-    public static int Stage4 = 1800;
-    public static int Stage5 = 2400;
-    public static int Stage6 = 3000;
-    public static int Stage7 = 3600;
-    public static int Stage8 = 4200;
-    public static int Stage9 = 4800;
-    public static int Stage10 = 5400;
+    public static int Stage2 = 500;
+    public static int Stage3 = 700;
+    public static int Stage4 = 900;
+    public static int Stage5 = 1200;
+    public static int Stage6 = 1500;
+    public static int Stage7 = 1800;
+    public static int Stage8 = 2100;
+    public static int Stage9 = 2800;
+    public static int Stage10 = 3700;
     ///Your Store Url just Change the Id
     public static String StoreUrl = "https://play.google.com/store/apps/developer?id=" + "Instagram";
     //Your AppUrl Change The ID

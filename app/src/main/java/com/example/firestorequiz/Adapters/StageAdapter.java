@@ -45,7 +45,7 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public int getItemViewType(int position) {
 
-        if (StageDataList.get(position).isOpen()) {
+        if (StageDataList.get(position).isOpen()==1) {
             return 1;
         } else {
             return 0;
@@ -71,23 +71,16 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 mContext.getPackageName());
 
 
-        if (!StageDataList.get(position).isOpen()) {
+        if (StageDataList.get(position).isOpen()==0) {
             stageViewHolder.StageImage.setImageResource(ImageResId);
         }
 
-        int opened = 0;
-        for (int i = 0; i < 9; i++) {
-            if (StageDataList.get(position).isOpen()) {
-                ++opened;
-            }
-        }
 
-        progressBar.setProgress(opened);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (StageDataList.get(position).isOpen()) {
+                if (StageDataList.get(position).isOpen()==1) {
                     Intent intent2 = new Intent(mContext, Playing.class);
                     intent2.putExtra("Level", StageDataList.get(position).getStageId());
                     mContext.startActivity(intent2);
