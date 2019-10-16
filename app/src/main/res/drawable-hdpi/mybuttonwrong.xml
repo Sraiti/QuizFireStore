@@ -4,7 +4,7 @@
 
     <corners android:radius="10dp" />
 
-    <solid android:color="#000000" />
+    <solid android:color="@color/flatui_pomegranate" />
 
     <stroke
         android:width="9px"

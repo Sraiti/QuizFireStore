@@ -4,10 +4,10 @@ android:shape="rectangle" >
 
 <corners android:radius="10dp" />
 
-<solid android:color="#000000" />
+<solid android:color="@color/flatui_wet_asphalt" />
 
 <stroke
-    android:width="5px"
-    android:color="@color/flatui_sun_flower" />
+    android:width="7px"
+    android:color="@color/flatui_midnight_blue" />
 
 </shape>
