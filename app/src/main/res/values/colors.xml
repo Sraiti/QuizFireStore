@@ -35,4 +35,5 @@
     <color name="colord">#00E676</color>
     <color name="backgroun">#3498DB</color>
     <color name="back2">#2980B9</color>
+    <color name="white">#fff</color>
  </resources>

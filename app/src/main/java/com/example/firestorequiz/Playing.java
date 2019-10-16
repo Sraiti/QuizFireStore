@@ -218,12 +218,12 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             Category cat = new Category(CategoryID, CategoryName, ImageURL);
             categoryDbHelper.AddPoints(cat, WinningPrize + points);
             //wont change
-            Toast.makeText(this, FinalValues.CorrectToastMessage, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, FinalValues.CorrectToastMessage, Toast.LENGTH_SHORT).show();
             //Discarded
 
 
         } else {
-            Toast.makeText(this, "Wrong", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Wrong", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -401,12 +401,12 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onFinish() {
                 if (++index > totalQues) {
-                    Toast.makeText(Playing.this, "Finished", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(Playing.this, "Finished", Toast.LENGTH_SHORT).show();
                     countDownTimer.cancel();
 
 
                 } else {
-                    Toast.makeText(Playing.this, FinalValues.TIMEOUT_MESSAGE, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Playing.this, FinalValues.TIMEOUT_MESSAGE, Toast.LENGTH_SHORT).show();
                 }
                 countDownTimer.cancel();
                 if (countDownTimer != null)

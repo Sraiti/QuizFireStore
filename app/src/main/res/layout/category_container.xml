@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginBottom="10dp"
-    card_view:cardCornerRadius="@dimen/cardview_default_radius"
+    android:layout_margin="6dp"
+    card_view:cardCornerRadius="8dp"
     card_view:cardElevation="@dimen/cardview_default_elevation" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Category Name"
-            android:textColor="@color/common_google_signin_btn_text_dark_default"
+            android:textColor="@color/flatui_alizarin"
             android:textSize="30sp"
             android:textStyle="bold"
             card_view:layout_constraintBottom_toBottomOf="parent"

@@ -1,21 +1,43 @@
 package com.example.firestorequiz;
 
+import android.app.Dialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.firestorequiz.Ads.ConsentSDK;
 import com.example.firestorequiz.Model.Category;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.VideoController;
+import com.google.android.gms.ads.VideoOptions;
+import com.google.android.gms.ads.formats.MediaView;
+import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
+import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
 
 
     public static final int NUMBER_OF_ADS = 3;
@@ -67,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         loadNativeAds();
         // Update the RecyclerView item's list with native ads.
         //    loadNativeAds();
+
 
 
     }
@@ -149,13 +173,6 @@ public class MainActivity extends AppCompatActivity {
         // transaction.commit();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        finish();
-
-    }
 
     private void GetData() {
 
@@ -191,4 +208,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
+
 }

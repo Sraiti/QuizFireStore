@@ -29,7 +29,6 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         this.db = db;
-
         String Query = "Create TABLE " + CategoryTable.TableName + "( " +
                 CategoryTable.CategoryID + " INTEGER PRIMARY KEY, " +
                 CategoryTable.CategoryName + " TEXT, " +
