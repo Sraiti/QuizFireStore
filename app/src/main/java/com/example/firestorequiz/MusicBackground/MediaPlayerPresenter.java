@@ -12,7 +12,7 @@ public class MediaPlayerPresenter {
     private MediaPlayer mPlayer;
 
     private MediaPlayerPresenter(Context context) {
-        mPlayer = MediaPlayer.create(context, R.raw.jingle);
+        mPlayer = MediaPlayer.create(context, R.raw.main_music);
         mPlayer.setLooping(true);
     }
 

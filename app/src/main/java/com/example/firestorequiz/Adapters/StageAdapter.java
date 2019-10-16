@@ -92,7 +92,7 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     intent2.putExtra("Level", StageDataList.get(position).getStageId());
                     mContext.startActivity(intent2);
                 } else {
-                    Toast.makeText(mContext, "You don't have enough points !!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "You don't have enough points !!", Toast.LENGTH_SHORT).show();
                 }
 
 

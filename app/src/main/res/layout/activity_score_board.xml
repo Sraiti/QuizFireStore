@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/flat2"
     tools:context=".ScoreBoard">
 
     <TextView
@@ -13,7 +14,7 @@
         android:layout_margin="15dp"
         android:padding="8dp"
         android:text="Score Board"
-        android:textColor="@color/red"
+        android:textColor="@color/colorc"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/recycler_score"
@@ -25,6 +26,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_score"
         android:layout_width="0dp"
+        android:background="#ffffff"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"

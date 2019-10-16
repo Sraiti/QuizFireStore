@@ -20,4 +20,13 @@
     //POINTS
     <string name="PRIZE">100</string>
 
+
+    <string name="app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="ad_inter">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="ad_banner">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="native_ads" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+
+    <string name="ad_attribution"  translatable="false">Ad</string>
+    <string name="dialog_close_msg">Are you sure you want to quit?</string>
+
 </resources>
