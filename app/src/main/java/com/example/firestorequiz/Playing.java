@@ -191,6 +191,8 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         } else {
             Intent done = new Intent(Playing.this, Done.class);
             done.putExtra("Score", score);
+            done.putExtra("Stage", Stage);
+            done.putExtra("CategoryID", CategoryID);
             countDownTimer.cancel();
             startActivity(done);
             finish();
@@ -320,6 +322,8 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                         countDownTimer.cancel();
                         Intent done = new Intent(Playing.this, Done.class);
                         done.putExtra("Score", score);
+                        done.putExtra("CategoryID", CategoryID);
+                        done.putExtra("Stage", Stage);
                         startActivity(done);
                         finish();
                         return;

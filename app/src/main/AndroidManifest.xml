@@ -17,7 +17,8 @@
         <activity android:name=".ScoreBoard" />
         <activity
             android:name=".Done"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".Home"
             android:screenOrientation="portrait" />
