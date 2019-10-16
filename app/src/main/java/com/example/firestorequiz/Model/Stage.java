@@ -40,8 +40,9 @@ public class Stage {
 
         Stages.add(new Stage(1, RomanNumerals(1), "lock", true));
 
+        int stage2state =categoryDbHelper.getsatgeState(2,CategoryID);
 
-        if (points >= FinalValues.Stage2) {
+        if (stage2state==1) {
             Stages.add(new Stage(2, RomanNumerals(2), "lock", true));
         } else {
             Stages.add(new Stage(2, RomanNumerals(2), "lock", false));

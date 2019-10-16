@@ -136,4 +136,14 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
     }
 
 
+    public void AddOrUpdateStage(int stageid,int CategoryId,int Points){
+
+
+    }
+    public int getsatgeState(int SatgeId,int CategoryId) {
+
+
+
+
+    }
 }
