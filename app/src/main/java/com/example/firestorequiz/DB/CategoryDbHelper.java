@@ -184,6 +184,7 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
 
     }
 
+
     private void InsertStageStatue(Stage stage) {
 
         String InertQuery =
@@ -201,12 +202,11 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
 
     }
 
-    private void UpdateStageStatue(Stage stage) {
+    public void UpdateStageStatue(Stage stage) {
         String UpdateQuery =
                 "UPDATE " + StageTable.TableName + " SET " +
                         StageTable.SatgePoints + " = " +
-                        StageTable.SatgePoints +
-                        "+" + stage.getPoints() +
+                        StageTable.SatgePoints + "+" + stage.getPoints() +
                         "\n WHERE  " + StageTable.CategoryID + "=" + stage.getCategoryID() +
                           " and "+StageTable.StageID +"="+stage.getStageId() +";";
 

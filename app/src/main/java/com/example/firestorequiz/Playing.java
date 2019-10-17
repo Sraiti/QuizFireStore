@@ -33,7 +33,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shreyaspatil.MaterialDialog.MaterialDialog;
 import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
-import com.shreyaspatil.MaterialDialog.interfaces.OnDismissListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -258,6 +257,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int which) {
                                 categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, 0, 1));
+                                categoryDbHelper.UpdateStageStatue(new Stage(Stage, CategoryID, score, 1));
                                 Intent intent2 = new Intent(Playing.this, Playing.class);
                                 intent2.putExtra("Level", 1 + Stage);
                                 startActivity(intent2);
@@ -269,29 +269,22 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                             public void onClick(DialogInterface dialogInterface, int which) {
 
                                 dialogInterface.dismiss();
+                                circularProgress.setCurrentProgress(0);
+                                ProgressValue = 0;
+                                countDownTimer.start();
                             }
                         })
                         .setAnimation(R.raw.unlocking)
                         .setCancelable(true)
                         .build();
 
-                mDialog.setOnDismissListener(new OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
 
-
-                        circularProgress.setCurrentProgress(0);
-                        ProgressValue = 0;
-                        countDownTimer.start();
-                    }
-                });
                 // Show Dialog
                 mDialog.show();
             }
 
         } else {
             Souls = Souls - 1;
-
             if (Souls <= 0) {
                 Heart03.setVisibility(View.INVISIBLE);
                 countDownTimer.cancel();

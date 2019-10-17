@@ -67,10 +67,11 @@ public class Done extends AppCompatActivity {
         int CategoryID = a.getIntExtra("CategoryID", 8);
 
 
-        int StageRequir = GetStageRequ(1 + Stage);
+        int StageRequir = GetStageRequ(Stage);
 
         if (point >= StageRequir) {
             categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, 0, 1));
+            categoryDbHelper.UpdateStageStatue(new Stage(Stage, CategoryID, point, 1));
         }
 
 
