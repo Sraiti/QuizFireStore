@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.firestorequiz.Ads.ConsentSDK;
 import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.DB.CategoryDbHelper;
@@ -33,6 +34,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shreyaspatil.MaterialDialog.MaterialDialog;
 import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
+import com.shreyaspatil.MaterialDialog.interfaces.OnDismissListener;
+import com.shreyaspatil.MaterialDialog.interfaces.OnShowListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -69,7 +72,8 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     CategoryDbHelper categoryDbHelper;
 
     MediaPlayer Correct, Wrong;
-
+    MaterialDialog mDialog;
+    LottieAnimationView animationView;
     MediaPlayerPresenter player;
 
     private AdView adView;
@@ -121,6 +125,42 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
+
+        mDialog = new MaterialDialog.Builder(this)
+                .setTitle("Next Stage Is Unlocked ")
+                .setMessage("Play It NOW !!")
+                .setCancelable(false)
+                .setPositiveButton("Play", R.drawable.ic_stars_black_24dp, new MaterialDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, 0, 1));
+                        categoryDbHelper.UpdateStageStatue(new Stage(Stage, CategoryID, score, 1));
+                        Category cat2 = categoryDbHelper.getCategory(CategoryID);
+                        Intent intent2 = new Intent(Playing.this, Quiz.class);
+                        intent2.putExtra("CategoryId", cat2.getCategoryId());
+                        intent2.putExtra("CategoryName", cat2.getCategoryName());
+                        intent2.putExtra("ImageURL", cat2.getCategoryImage());
+                        startActivity(intent2);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Keep Playing", R.drawable.ic_arrow_back_black_24dp, new MaterialDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setAnimation(R.raw.unlocking)
+                .build();
+
+        mDialog.setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                countDownTimer.start();
+            }
+        });
+        animationView = mDialog.getAnimationView();
+
         player = MediaPlayerPresenter.getInstance(Playing.this);
 
         QuestionText = findViewById(R.id.txt_Ques);
@@ -178,13 +218,14 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
 
     public void NextQuestion(int index) {
+        AnswerA.setClickable(true);
+        AnswerB.setClickable(true);
+        AnswerC.setClickable(true);
+        AnswerD.setClickable(true);
 
 
         if (index < totalQues) {
-            AnswerA.setClickable(true);
-            AnswerB.setClickable(true);
-            AnswerC.setClickable(true);
-            AnswerD.setClickable(true);
+
 
             circularProgress.setCurrentProgress(0);
             ProgressValue = 0;
@@ -221,6 +262,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             finish();
             return;
         }
+
     }
 
     @Override
@@ -248,48 +290,18 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             int StageRequir = GetStageRequ(Stage);
 
             if (score == StageRequir) {
-                countDownTimer.cancel();
-                MaterialDialog mDialog = new MaterialDialog.Builder(this)
-                        .setTitle("Next Stage Is Unlocked ")
-                        .setMessage("Play It NOW !!")
-                        .setCancelable(false)
-                        .setPositiveButton("Play", R.drawable.ic_stars_black_24dp, new MaterialDialog.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int which) {
-                                categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, 0, 1));
-                                categoryDbHelper.UpdateStageStatue(new Stage(Stage, CategoryID, score, 1));
-                                Category cat2 = categoryDbHelper.getCategory(CategoryID);
-                                Intent intent2 = new Intent(Playing.this, Quiz.class);
-                                intent2.putExtra("CategoryId", cat2.getCategoryId());
-                                intent2.putExtra("CategoryName", cat2.getCategoryName());
-                                intent2.putExtra("ImageURL", cat2.getCategoryImage());
-                                startActivity(intent2);
-                                finish();
-                            }
-                        })
-                        .setNegativeButton("Keep Playing", R.drawable.ic_arrow_back_black_24dp, new MaterialDialog.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int which) {
-
-                                dialogInterface.dismiss();
-                                circularProgress.setCurrentProgress(0);
-                                ProgressValue = 0;
-                                countDownTimer.start();
-                            }
-                        })
-                        .setAnimation(R.raw.unlocking)
-                        .build();
-
-
                 // Show Dialog
                 mDialog.show();
+
             }
 
         } else {
+            Wrong.start();
             Souls = Souls - 1;
             if (Souls <= 0) {
                 Heart03.setVisibility(View.INVISIBLE);
-                countDownTimer.cancel();
+                if (countDownTimer != null)
+                    countDownTimer.cancel();
                 Intent done = new Intent(Playing.this, Done.class);
                 done.putExtra("Score", score);
                 done.putExtra("CategoryID", CategoryID);
@@ -342,6 +354,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        countDownTimer.cancel();
 
         final Button ClickedButton = (Button) v;
 
@@ -363,7 +376,10 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                AnswerA.setClickable(false);
+                AnswerB.setClickable(false);
+                AnswerC.setClickable(false);
+                AnswerD.setClickable(false);
             }
 
             @Override
@@ -374,7 +390,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                     Correct.start();
 
 
-                    countDownTimer.cancel();
                     ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
 
                     points(true);
@@ -386,15 +401,14 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                         public void run() {
                             ClickedButton.setBackground(getResources().getDrawable(R.drawable.button_background));
                             ClickedButton.clearAnimation();
-                            NextQuestion(++index);
+                            if (!animationView.isAnimating())
+                                NextQuestion(++index);
                         }
                     }, 3000);
 
 
                 } else {
-                    Wrong.start();
 
-                    countDownTimer.cancel();
                     points(false);
 
 
@@ -429,7 +443,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                             for (int i = 0; i < Butttons.size(); i++) {
                                 Butttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybutton));
                             }
-
+                            if (!animationView.isAnimating())
                             NextQuestion(++index);
                         }
                     }, 3000);
@@ -454,6 +468,15 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
 
+
+        mDialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                countDownTimer.cancel();
+                ProgressValue = 0;
+            }
+        });
+
         countDownTimer = new CountDownTimer(TIMEOUT, INTERVAL) {
 
             @Override
@@ -466,11 +489,12 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             public void onFinish() {
                 if (++index > totalQues) {
                     // Toast.makeText(Playing.this, "Finished", Toast.LENGTH_SHORT).show();
-                    countDownTimer.cancel();
                     points(false);
+                    countDownTimer.cancel();
 
                 } else {
                     //Toast.makeText(Playing.this, FinalValues.TIMEOUT_MESSAGE, Toast.LENGTH_SHORT).show();
+                    points(false);
                 }
                 if (countDownTimer != null) {
                     countDownTimer.cancel();
