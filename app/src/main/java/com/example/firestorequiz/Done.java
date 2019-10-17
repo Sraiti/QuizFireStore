@@ -81,7 +81,7 @@ public class Done extends AppCompatActivity {
                     .setTitle("Replay The Stage")
                     .setMessage("Play Again")
                     .setCancelable(false)
-                    .setPositiveButton("Accept the Challenge ", R.drawable.ic_stars_black_24dp, new MaterialDialog.OnClickListener() {
+                    .setPositiveButton("Play", R.drawable.ic_stars_black_24dp, new MaterialDialog.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which) {
                             Intent intent2 = new Intent(Done.this, Playing.class);
@@ -99,7 +99,7 @@ public class Done extends AppCompatActivity {
 
                         }
                     })
-                    .setAnimation(R.raw.locked)
+                    .setAnimation(R.raw.unlocking)
                     .build();
 
 
