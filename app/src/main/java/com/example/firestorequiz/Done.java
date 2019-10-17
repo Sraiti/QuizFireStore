@@ -99,7 +99,7 @@ public class Done extends AppCompatActivity {
 
                         }
                     })
-                    .setAnimation(R.raw.unlocking)
+                    .setAnimation(R.raw.lock)
                     .build();
 
 
