@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,7 +35,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shreyaspatil.MaterialDialog.MaterialDialog;
 import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
-import com.shreyaspatil.MaterialDialog.interfaces.OnDismissListener;
 import com.shreyaspatil.MaterialDialog.interfaces.OnShowListener;
 import com.squareup.picasso.Picasso;
 
@@ -153,12 +153,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                 .setAnimation(R.raw.unlocking)
                 .build();
 
-        mDialog.setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                countDownTimer.start();
-            }
-        });
+
         animationView = mDialog.getAnimationView();
 
         player = MediaPlayerPresenter.getInstance(Playing.this);
@@ -218,6 +213,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
 
     public void NextQuestion(int index) {
+        Toast.makeText(this, String.valueOf(index), Toast.LENGTH_SHORT).show();
         AnswerA.setClickable(true);
         AnswerB.setClickable(true);
         AnswerC.setClickable(true);
@@ -400,7 +396,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                         @Override
                         public void run() {
                             ClickedButton.setBackground(getResources().getDrawable(R.drawable.button_background));
-                            ClickedButton.clearAnimation();
                             if (!animationView.isAnimating())
                                 NextQuestion(++index);
                         }
