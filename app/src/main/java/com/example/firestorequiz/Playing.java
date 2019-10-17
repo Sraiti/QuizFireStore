@@ -13,7 +13,6 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -213,7 +212,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
 
     public void NextQuestion(int index) {
-        Toast.makeText(this, String.valueOf(index), Toast.LENGTH_SHORT).show();
         AnswerA.setClickable(true);
         AnswerB.setClickable(true);
         AnswerC.setClickable(true);
