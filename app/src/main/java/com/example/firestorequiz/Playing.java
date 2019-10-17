@@ -246,7 +246,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             //Toast.makeText(this, FinalValues.CorrectToastMessage, Toast.LENGTH_SHORT).show();
             //Discarded
 
-            int StageRequir = GetStageRequ(1 + Stage);
+            int StageRequir = GetStageRequ(Stage);
 
             if (score == StageRequir) {
                 countDownTimer.cancel();
