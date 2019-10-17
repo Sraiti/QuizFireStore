@@ -12,8 +12,6 @@ import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.DB.CategoryDbHelper;
 import com.example.firestorequiz.Model.Stage;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
-import com.shreyaspatil.MaterialDialog.MaterialDialog;
-import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
 
 public class Done extends AppCompatActivity {
 
@@ -72,7 +70,7 @@ public class Done extends AppCompatActivity {
         int StageRequir = GetStageRequ(1 + Stage);
 
         if (point >= StageRequir) {
-            categoryDbHelper.AddStage(new Stage(Stage,CategoryID,point,1));
+            categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, 0, 1));
         }
 
 

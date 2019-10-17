@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 
 import com.example.firestorequiz.Contracts.CategoryContract.CategoryTable;
 import com.example.firestorequiz.Contracts.StageContract.StageTable;
-
 import com.example.firestorequiz.Model.Category;
 import com.example.firestorequiz.Model.Stage;
 
@@ -40,7 +39,7 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
                 ")";
 
         String QueryStage = "Create TABLE " + StageTable.TableName + "( " +
-                StageTable._ID + " INTEGER PRIMARY KEY, " +
+                StageTable.ID + " INTEGER PRIMARY KEY, " +
                 StageTable.CategoryID + " INTEGER , " +
                 StageTable.StageID + " INTEGER , " +
                 StageTable.SatgePoints + " INTEGER, " +
@@ -152,14 +151,13 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
 
         db = getReadableDatabase();
         int State = 0;
-        String QuerygetStatue = "SELECT  " + StageTable.IsOpen +
+        Cursor c = db.rawQuery("SELECT  " + StageTable.IsOpen +
                 " FROM " + StageTable.TableName +
-                " Where " + StageTable.CategoryID + "=" + CategoryId + " and "+
-                StageTable.StageID+"=" +StageId +";";
-        Cursor c = db.rawQuery(QuerygetStatue, null);
+                " Where " + StageTable.CategoryID + "=" + CategoryId + " and " +
+                StageTable.StageID + "=" + StageId, null);
 
         if (c.moveToFirst()) {
-            State = c.getInt(c.getColumnIndex(CategoryTable.CategoryPoints));
+            State = c.getInt(c.getColumnIndex(StageTable.IsOpen));
             c.close();
             return State;
         }

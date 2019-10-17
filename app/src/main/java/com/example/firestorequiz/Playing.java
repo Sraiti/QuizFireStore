@@ -173,7 +173,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         AnswerD.setOnClickListener(this);
 
         adView = findViewById(R.id.adView);
-        adView.loadAd(consentSDK.getAdRequest(this));
+        adView.loadAd(ConsentSDK.getAdRequest(this));
 
     }
 
@@ -249,7 +249,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             int StageRequir = GetStageRequ(1 + Stage);
 
             if (score == StageRequir) {
-                countDownTimer=null;
+                countDownTimer.cancel();
                 MaterialDialog mDialog = new MaterialDialog.Builder(this)
                         .setTitle("Next Stage Is Unlocked ")
                         .setMessage("Play It NOW !!")
@@ -257,7 +257,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                         .setPositiveButton("Play", R.drawable.ic_stars_black_24dp, new MaterialDialog.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int which) {
-                                categoryDbHelper.AddStage(new Stage(Stage, CategoryID, score, 1));
+                                categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, 0, 1));
                                 Intent intent2 = new Intent(Playing.this, Playing.class);
                                 intent2.putExtra("Level", 1 + Stage);
                                 startActivity(intent2);
@@ -278,7 +278,11 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                 mDialog.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-                        onResume();
+
+
+                        circularProgress.setCurrentProgress(0);
+                        ProgressValue = 0;
+                        countDownTimer.start();
                     }
                 });
                 // Show Dialog
@@ -482,6 +486,10 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         };
     }
 
+    private interface FireStoreCallback {
+        void OnCallBack(ArrayList<Question> List);
+    }
+
     public int GetStageRequ(int StageID) {
         switch (StageID) {
             case 1:
@@ -508,9 +516,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         return 0;
     }
 
-    private interface FireStoreCallback {
-        void OnCallBack(ArrayList<Question> List);
-    }
+
 }
 
 
