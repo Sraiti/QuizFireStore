@@ -52,7 +52,7 @@ public class Home extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        if (hasFocus) {
+        if (hasFocus && preferences.getBoolean("music", true)) {
             player.playMusic();
 
         }
