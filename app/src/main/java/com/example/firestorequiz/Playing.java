@@ -144,7 +144,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                         finish();
                     }
                 })
-                .setNegativeButton("Keep Playing", R.drawable.ic_arrow_back_black_24dp, new MaterialDialog.OnClickListener() {
+                .setNegativeButton("Keep Playing!", R.drawable.ic_arrow_back_black_24dp, new MaterialDialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
                         dialogInterface.dismiss();

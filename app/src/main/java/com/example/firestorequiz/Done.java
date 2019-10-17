@@ -79,7 +79,7 @@ public class Done extends AppCompatActivity {
         } else {
             MaterialDialog mDialog = new MaterialDialog.Builder(this)
                     .setTitle("Replay The Stage")
-                    .setMessage("Play Again")
+                    .setMessage("Play Again?")
                     .setCancelable(false)
                     .setPositiveButton("Play", R.drawable.ic_stars_black_24dp, new MaterialDialog.OnClickListener() {
                         @Override
