@@ -57,7 +57,7 @@ public class Quiz extends AppCompatActivity {
         progressBar = findViewById(R.id.progress);
         progressBar.getProgressDrawable().setColorFilter(
                 Color.RED, PorterDuff.Mode.MULTIPLY);
-        sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        sharedPref = this.getSharedPreferences("MyPref", MODE_PRIVATE);
 
         editor = sharedPref.edit();
 
