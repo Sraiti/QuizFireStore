@@ -105,6 +105,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void onClick(View v) {
 
+
                         Intent intent2 = new Intent(mContext, Quiz.class);
 
                         intent2.putExtra("CategoryId", menuItem.getCategoryId());

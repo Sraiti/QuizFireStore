@@ -81,13 +81,21 @@ public class Home extends AppCompatActivity {
         preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
         editor = preferences.edit();
-
-        editor.apply();
-
         player = MediaPlayerPresenter.getInstance(Home.this);
 
-        if (preferences.getBoolean("music", true))
+        editor.apply();
+        if (preferences.getBoolean("music", true)) {
+
             player.playMusic();
+            editor.putBoolean("music", true);
+            editor.apply();
+        }
+        if (!preferences.getBoolean("music", true)) {
+            Settings.setImageResource(R.drawable.ic_volume_off_black_24dp);
+        } else {
+            Settings.setImageResource(R.drawable.ic_volume_up_black_24dp);
+        }
+
 
         ScoreBoard.setOnClickListener(new View.OnClickListener() {
             @Override

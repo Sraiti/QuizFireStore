@@ -13,6 +13,8 @@ import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.DB.CategoryDbHelper;
 import com.example.firestorequiz.Model.Stage;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
+import com.shreyaspatil.MaterialDialog.MaterialDialog;
+import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
 
 public class Done extends AppCompatActivity {
 
@@ -74,6 +76,35 @@ public class Done extends AppCompatActivity {
         if (point >= StageRequir) {
             categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, 0, 1));
             categoryDbHelper.UpdateStageStatue(new Stage(Stage, CategoryID, point, 1));
+        } else {
+            MaterialDialog mDialog = new MaterialDialog.Builder(this)
+                    .setTitle("Replay The Stage")
+                    .setMessage("Play Again")
+                    .setCancelable(false)
+                    .setPositiveButton("Accept the Challenge ", R.drawable.ic_stars_black_24dp, new MaterialDialog.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which) {
+                            Intent intent2 = new Intent(Done.this, Playing.class);
+                            intent2.putExtra("Level", Stage);
+                            startActivity(intent2);
+                            finish();
+
+                        }
+                    })
+                    .setNegativeButton("Not now", R.drawable.ic_arrow_back_black_24dp, new MaterialDialog.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which) {
+
+                            dialogInterface.dismiss();
+
+                        }
+                    })
+                    .setAnimation(R.raw.unlocking)
+                    .build();
+
+
+            // Show Dialog
+            mDialog.show();
         }
 
 

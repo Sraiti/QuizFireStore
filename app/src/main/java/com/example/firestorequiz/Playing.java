@@ -258,8 +258,11 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                             public void onClick(DialogInterface dialogInterface, int which) {
                                 categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, 0, 1));
                                 categoryDbHelper.UpdateStageStatue(new Stage(Stage, CategoryID, score, 1));
-                                Intent intent2 = new Intent(Playing.this, Playing.class);
-                                intent2.putExtra("Level", 1 + Stage);
+                                Category cat2 = categoryDbHelper.getCategory(CategoryID);
+                                Intent intent2 = new Intent(Playing.this, Quiz.class);
+                                intent2.putExtra("CategoryId", cat2.getCategoryId());
+                                intent2.putExtra("CategoryName", cat2.getCategoryName());
+                                intent2.putExtra("ImageURL", cat2.getCategoryImage());
                                 startActivity(intent2);
                                 finish();
                             }
@@ -275,7 +278,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                             }
                         })
                         .setAnimation(R.raw.unlocking)
-                        .setCancelable(true)
                         .build();
 
 

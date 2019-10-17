@@ -147,7 +147,7 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
         return categoryList;
     }
 
-    public int getsatgeState(int StageId,int CategoryId) {
+    public int getsatgeState(int StageId, int CategoryId) {
 
         db = getReadableDatabase();
         int State = 0;
@@ -171,8 +171,8 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
         db = getReadableDatabase();
         String QuerygetStatue = "SELECT  " + StageTable.IsOpen +
                 " FROM " + StageTable.TableName +
-                " Where " + StageTable.CategoryID + "=" + stage.getCategoryID() + " and "+
-                StageTable.StageID+"=" +stage.getStageId() +";";
+                " Where " + StageTable.CategoryID + "=" + stage.getCategoryID() + " and " +
+                StageTable.StageID + "=" + stage.getStageId() + ";";
         Cursor c = db.rawQuery(QuerygetStatue, null);
 
         if (c.moveToFirst()) {
@@ -184,6 +184,25 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
 
     }
 
+
+    public Category getCategory(int CategoryID) {
+        db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + CategoryTable.TableName + " where " +
+                CategoryTable.CategoryID + "=" + CategoryID, null);
+
+        Category cat = new Category();
+
+        if (c.moveToFirst()) {
+            cat.setCategoryId(c.getInt(c.getColumnIndex(CategoryTable.CategoryID)));
+            cat.setCategoryImage(c.getString(c.getColumnIndex(CategoryTable.CategoryImage)));
+            cat.setCategoryName(c.getString(c.getColumnIndex(CategoryTable.CategoryName)));
+            cat.setCategoryPoints(c.getInt(c.getColumnIndex(CategoryTable.CategoryPoints)));
+        }
+        c.close();
+        return cat;
+
+
+    }
 
     private void InsertStageStatue(Stage stage) {
 
@@ -208,10 +227,10 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
                         StageTable.SatgePoints + " = " +
                         StageTable.SatgePoints + "+" + stage.getPoints() +
                         "\n WHERE  " + StageTable.CategoryID + "=" + stage.getCategoryID() +
-                          " and "+StageTable.StageID +"="+stage.getStageId() +";";
+                        " and " + StageTable.StageID + "=" + stage.getStageId() + ";";
 
         db.execSQL(UpdateQuery);
-        
+
     }
 
 }
