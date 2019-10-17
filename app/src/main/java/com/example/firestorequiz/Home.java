@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,6 +45,8 @@ public class Home extends AppCompatActivity {
     ImageView Settings;
 
     MediaPlayerPresenter player;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -75,8 +78,16 @@ public class Home extends AppCompatActivity {
         Settings = findViewById(R.id.img_settings);
         Settings.setImageResource(R.drawable.ic_volume_up_black_24dp);
 
+        preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+
+        editor = preferences.edit();
+
+        editor.apply();
+
         player = MediaPlayerPresenter.getInstance(Home.this);
-        player.playMusic();
+
+        if (preferences.getBoolean("music", true))
+            player.playMusic();
 
         ScoreBoard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,11 +138,14 @@ public class Home extends AppCompatActivity {
                     Settings.setImageResource(R.drawable.ic_volume_off_black_24dp);
 
                     player.pauseMusic();
-
+                    editor.putBoolean("music", false);
+                    editor.apply();
                 } else {
                     Settings.setImageResource(R.drawable.ic_volume_up_black_24dp);
 
                     player.playMusic();
+                    editor.putBoolean("music", true);
+                    editor.apply();
 
                 }
             }

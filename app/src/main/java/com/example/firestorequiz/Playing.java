@@ -79,7 +79,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        if (hasFocus) {
+        if (hasFocus && prefs.getBoolean("music", true)) {
             player.playMusic();
 
         }

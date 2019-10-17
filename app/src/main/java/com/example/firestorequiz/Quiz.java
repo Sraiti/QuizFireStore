@@ -98,7 +98,7 @@ public class Quiz extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        if (hasFocus) {
+        if (hasFocus && sharedPref.getBoolean("music", true)) {
             player.playMusic();
 
         }

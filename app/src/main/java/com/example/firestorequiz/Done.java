@@ -1,6 +1,7 @@
 package com.example.firestorequiz;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ public class Done extends AppCompatActivity {
 
     TextView txt_DoneScore;
     ImageView Share, Home;
+    SharedPreferences preferences;
 
     @Override
     public void onBackPressed() {
@@ -40,9 +42,8 @@ public class Done extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        if (hasFocus) {
+        if (hasFocus && preferences.getBoolean("music", true)) {
             player.playMusic();
-
         }
 
     }
@@ -58,6 +59,7 @@ public class Done extends AppCompatActivity {
         Share = findViewById(R.id.img_share);
         Home = findViewById(R.id.img_home);
 
+        preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         CategoryDbHelper categoryDbHelper = new CategoryDbHelper(this);
 
         Intent a = getIntent();

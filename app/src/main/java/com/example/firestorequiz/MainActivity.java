@@ -1,43 +1,22 @@
 package com.example.firestorequiz;
 
-import android.app.Dialog;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.firestorequiz.Ads.ConsentSDK;
 import com.example.firestorequiz.Model.Category;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.VideoController;
-import com.google.android.gms.ads.VideoOptions;
-import com.google.android.gms.ads.formats.MediaView;
-import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
-import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -62,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<UnifiedNativeAd> mNativeAds = new ArrayList<>();
 
+    SharedPreferences preferences;
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -81,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
         player = MediaPlayerPresenter.getInstance(MainActivity.this);
         // Create new fragment to display a progress spinner while the data set for the
@@ -202,9 +183,8 @@ public class MainActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        if (hasFocus) {
+        if (hasFocus && preferences.getBoolean("music", true)) {
             player.playMusic();
-
         }
 
     }

@@ -1,5 +1,6 @@
 package com.example.firestorequiz;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 public class ScoreBoard extends AppCompatActivity {
 
+    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,7 @@ public class ScoreBoard extends AppCompatActivity {
 
         player = MediaPlayerPresenter.getInstance(ScoreBoard.this);
 
+        sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
         CategoryDbHelper dbHelper = new CategoryDbHelper(this);
         RecyclerView recyclerView = findViewById(R.id.recycler_score);
@@ -52,7 +55,7 @@ public class ScoreBoard extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        if (hasFocus) {
+        if (hasFocus && sharedPref.getBoolean("music", true)) {
             player.playMusic();
 
         }
