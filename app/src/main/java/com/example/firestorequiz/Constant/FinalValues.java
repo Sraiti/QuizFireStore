@@ -25,6 +25,5 @@ public class FinalValues {
     //The Shared Text
     public static String ShareText = "Come and Play with and try to beat my record";
     ///Messages Applied in the Gameplay
-    public static String CorrectToastMessage = "+100";
-    public static String TIMEOUT_MESSAGE = "Time out";
+
 }
