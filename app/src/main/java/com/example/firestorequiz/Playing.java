@@ -54,6 +54,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     TextView QuestionText, TxtScore;
     Button AnswerA, AnswerB, AnswerC, AnswerD;
     ImageView Heart01, Heart02, Heart03;
+    boolean isRunning;
 
     CountDownTimer countDownTimer;
     int ProgressValue = 0;
@@ -147,6 +148,13 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
                         dialogInterface.dismiss();
+
+                        circularProgress.setCurrentProgress(0);
+                        ProgressValue = 0;
+
+
+                        countDownTimer.start();
+                        isRunning = true;
                     }
                 })
                 .setAnimation(R.raw.unlocking)
@@ -240,7 +248,9 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             AnswerD.setText(Answer4);
 
             try {
-                countDownTimer.start();
+                if (!isRunning) {
+                    countDownTimer.start();
+                }
 
             } catch (Exception Ex) {
                 countDownTimer = null;
@@ -349,6 +359,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         countDownTimer.cancel();
+        isRunning = false;
 
         final Button ClickedButton = (Button) v;
 
@@ -466,9 +477,11 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 countDownTimer.cancel();
+                isRunning = false;
                 ProgressValue = 0;
             }
         });
+
 
         countDownTimer = new CountDownTimer(TIMEOUT, INTERVAL) {
 
@@ -476,6 +489,8 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             public void onTick(long millisUntilFinished) {
                 circularProgress.setCurrentProgress(ProgressValue);
                 ProgressValue++;
+                isRunning = true;
+
             }
 
             @Override
@@ -484,6 +499,8 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                     // Toast.makeText(Playing.this, "Finished", Toast.LENGTH_SHORT).show();
                     points(false);
                     countDownTimer.cancel();
+                    isRunning = false;
+
 
                 } else {
                     //Toast.makeText(Playing.this, FinalValues.TIMEOUT_MESSAGE, Toast.LENGTH_SHORT).show();
@@ -491,6 +508,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                 }
                 if (countDownTimer != null) {
                     countDownTimer.cancel();
+                    isRunning = false;
                     NextQuestion(++index);
 
                 }
