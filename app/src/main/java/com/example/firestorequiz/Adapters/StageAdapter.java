@@ -64,7 +64,7 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         StageViewHolder stageViewHolder = (StageViewHolder) holder;
 
         if (StageDataList.get(position).isOpen() == 1) {
-            stageViewHolder.StageName.setText(StageDataList.get(position).getStageText());
+            stageViewHolder.StageName.setText(StageDataList.get(position).getStageText()+" Opened");
         }
         int ImageResId = mContext.getResources().getIdentifier("lock", "drawable",
                 mContext.getPackageName());

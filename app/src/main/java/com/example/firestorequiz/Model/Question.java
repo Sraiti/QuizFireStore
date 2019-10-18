@@ -5,6 +5,8 @@ public class Question {
     String Question;
     String Answer0, Answer01, Answer02, Answer03;
     String CorrectAnswer;
+
+
     int CategoryID, Stage;
 
     public Question(String question, String answer0, String answer01, String answer02, String answer03, String correctAnswer, int categoryID, int stage) {

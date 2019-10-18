@@ -6,6 +6,8 @@ public class Category {
     private int CategoryId;
     private String CategoryName;
     private String CategoryImage;
+
+
     private int CategoryPoints;
 
 
