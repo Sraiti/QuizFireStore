@@ -44,7 +44,7 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public int getItemViewType(int position) {
 
-        if (StageDataList.get(position).isOpen()==1) {
+        if (StageDataList.get(position).isOpen() == 1) {
             return 1;
         } else {
             return 0;
@@ -63,15 +63,17 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         StageViewHolder stageViewHolder = (StageViewHolder) holder;
 
-        if (StageDataList.get(position).isOpen() == 1) {
-            stageViewHolder.StageName.setText(StageDataList.get(position).getStageText()+" Opened");
-        }
-        int ImageResId = mContext.getResources().getIdentifier("lock", "drawable",
+
+        stageViewHolder.StageName.setText(" Level " + StageDataList.get(position).getStageText());
+        int ImageResIdlock = mContext.getResources().getIdentifier("lock", "drawable",
+                mContext.getPackageName());
+        int ImageResIdunlock = mContext.getResources().getIdentifier("ic_lock_open_black_24dp", "drawable",
                 mContext.getPackageName());
 
-
-        if (StageDataList.get(position).isOpen()==0) {
-            stageViewHolder.StageImage.setImageResource(ImageResId);
+        if (StageDataList.get(position).isOpen() == 0) {
+            stageViewHolder.StageImage.setImageResource(ImageResIdlock);
+        } else {
+            stageViewHolder.StageImage.setImageResource(ImageResIdunlock);
         }
 
 
@@ -79,7 +81,7 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             @Override
             public void onClick(View v) {
 
-                if (StageDataList.get(position).isOpen()==1) {
+                if (StageDataList.get(position).isOpen() == 1) {
                     Intent intent2 = new Intent(mContext, Playing.class);
                     intent2.putExtra("Level", StageDataList.get(position).getStageId());
                     mContext.startActivity(intent2);
