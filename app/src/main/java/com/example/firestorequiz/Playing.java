@@ -34,6 +34,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shreyaspatil.MaterialDialog.MaterialDialog;
 import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
+import com.shreyaspatil.MaterialDialog.interfaces.OnDismissListener;
 import com.shreyaspatil.MaterialDialog.interfaces.OnShowListener;
 import com.squareup.picasso.Picasso;
 
@@ -142,10 +143,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
                         dialogInterface.dismiss();
-                        circularProgress.setCurrentProgress(0);
-                        ProgressValue = 0;
-                        countDownTimer.start();
-                        isRunning = true;
                     }
                 })
                 .setAnimation(R.raw.unlocking)
@@ -178,6 +175,24 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         adView.loadAd(ConsentSDK.getAdRequest(this));
 
 
+        mDialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                countDownTimer.cancel();
+                isRunning = false;
+
+            }
+        });
+        mDialog.setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                new AccessingDB(Playing.this).execute();
+                circularProgress.setCurrentProgress(0);
+                ProgressValue = 0;
+                countDownTimer.start();
+                isRunning = true;
+            }
+        });
     }
 
 
