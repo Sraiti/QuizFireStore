@@ -1,8 +1,10 @@
 package com.example.firestorequiz;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -21,12 +23,10 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.firestorequiz.Ads.ConsentSDK;
 import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.DB.CategoryDbHelper;
-import com.example.firestorequiz.Model.Category;
 import com.example.firestorequiz.Model.Question;
 import com.example.firestorequiz.Model.Stage;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,30 +46,31 @@ import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 
 public class Playing extends AppCompatActivity implements View.OnClickListener {
 
+
     public ArrayList<Question> mQuestions = new ArrayList<>();
+    List<Button> Buttons = new ArrayList<>();
 
 
     CircularProgressIndicator circularProgress;
+    CountDownTimer countDownTimer;
 
     TextView QuestionText, TxtScore;
     Button AnswerA, AnswerB, AnswerC, AnswerD;
     ImageView Heart01, Heart02, Heart03;
-    boolean isRunning;
 
-    CountDownTimer countDownTimer;
     int ProgressValue = 0;
     int index = 0, score = 0, totalQues, Souls = 3;
+    boolean isRunning;
 
     long TIMEOUT = FinalValues.TIMEOUT;
     long INTERVAL = FinalValues.INTERVAL;
     int WinningPrize = FinalValues.WinningPrize;
 
-    int CategoryID, Stage;
+    int CategoryID, Stage, StageRequir;
     String CategoryName, ImageURL;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-    CategoryDbHelper categoryDbHelper;
 
     MediaPlayer Correct, Wrong;
     MaterialDialog mDialog;
@@ -77,35 +78,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     MediaPlayerPresenter player;
 
     private AdView adView;
-    private ConsentSDK consentSDK;
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-
-        if (hasFocus && prefs.getBoolean("music", true)) {
-            player.playMusic();
-
-        }
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        //Just In case
-        countDownTimer.cancel();
-        Intent A = new Intent(Playing.this, Home.class);
-        startActivity(A);
-        finish();
-
-    }
-
-    @Override
-    protected void onUserLeaveHint() {
-        super.onUserLeaveHint();
-        player.pauseMusic();
-    }
 
 
     @Override
@@ -113,57 +85,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playing);
 
-        MobileAds.initialize(this,
-                getString(R.string.app_id));
-        consentSDK = new ConsentSDK.Builder(this)
-                .addPrivacyPolicy(getString(R.string.url_privacy)) // Add your privacy policy url
-                .addPublisherId(getString(R.string.publisher_id)) // Add your admob publisher id
-                .build();
-        consentSDK.checkConsent(new ConsentSDK.ConsentCallback() {
-            @Override
-            public void onResult(boolean isRequestLocationInEeaOrUnknown) {
-
-            }
-        });
-
-        mDialog = new MaterialDialog.Builder(this)
-                .setTitle("Next Stage Is Unlocked ")
-                .setMessage("Play It NOW !!")
-                .setCancelable(false)
-                .setPositiveButton("Play", R.drawable.ic_stars_black_24dp, new MaterialDialog.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, 0, 1));
-                        categoryDbHelper.UpdateStageStatue(new Stage(Stage, CategoryID, score, 1));
-                        Category cat2 = categoryDbHelper.getCategory(CategoryID);
-                        Intent intent2 = new Intent(Playing.this, Quiz.class);
-                        intent2.putExtra("CategoryId", cat2.getCategoryId());
-                        intent2.putExtra("CategoryName", cat2.getCategoryName());
-                        intent2.putExtra("ImageURL", cat2.getCategoryImage());
-                        startActivity(intent2);
-                        finish();
-                    }
-                })
-                .setNegativeButton("Keep Playing!", R.drawable.ic_arrow_back_black_24dp, new MaterialDialog.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        dialogInterface.dismiss();
-
-                        circularProgress.setCurrentProgress(0);
-                        ProgressValue = 0;
-
-
-                        countDownTimer.start();
-                        isRunning = true;
-                    }
-                })
-                .setAnimation(R.raw.unlocking)
-                .build();
-
-
-        animationView = mDialog.getAnimationView();
-
-        player = MediaPlayerPresenter.getInstance(Playing.this);
 
         QuestionText = findViewById(R.id.txt_Ques);
         AnswerA = findViewById(R.id.btn_Answer1);
@@ -176,24 +97,63 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         circularProgress = findViewById(R.id.circular_progress);
         TxtScore = findViewById(R.id.txt_Scored);
 
+        player = MediaPlayerPresenter.getInstance(Playing.this);
 
         Correct = MediaPlayer.create(Playing.this, R.raw.correct);
         Wrong = MediaPlayer.create(Playing.this, R.raw.wrong);
-
-        circularProgress.setAnimationEnabled(true);
         circularProgress.setMaxProgress(15);
 
-        Intent a = getIntent();
+
         prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = prefs.edit();
         editor.apply();
+
         ImageURL = prefs.getString(String.valueOf(R.string.ImagePath_key), "");
         CategoryName = prefs.getString(String.valueOf(R.string.CategoryName_key), "");
         CategoryID = prefs.getInt(String.valueOf(R.string.CategoryId_key), 8);
+        Intent a = getIntent();
         Stage = a.getIntExtra("Level", 8);
 
+        StageRequir = GetStageRequ(Stage);
 
-        categoryDbHelper = new CategoryDbHelper(this);
+        Buttons.add(AnswerA);
+        Buttons.add(AnswerB);
+        Buttons.add(AnswerC);
+        Buttons.add(AnswerD);
+
+        mDialog = new MaterialDialog.Builder(this)
+                .setTitle("Next Stage Is Unlocked ")
+                .setMessage("Play It NOW !!")
+                .setCancelable(false)
+                .setPositiveButton("Play", R.drawable.ic_stars_black_24dp, new MaterialDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+
+                        new AccessingDB(Playing.this).execute();
+                        Intent intent2 = new Intent(Playing.this, Quiz.class);
+                        intent2.putExtra("CategoryId", CategoryID);
+                        intent2.putExtra("CategoryName", CategoryName);
+                        intent2.putExtra("ImageURL", ImageURL);
+                        startActivity(intent2);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Keep Playing!", R.drawable.ic_arrow_back_black_24dp, new MaterialDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
+                        circularProgress.setCurrentProgress(0);
+                        ProgressValue = 0;
+                        countDownTimer.start();
+                        isRunning = true;
+                    }
+                })
+                .setAnimation(R.raw.unlocking)
+                .build();
+
+
+        animationView = mDialog.getAnimationView();
+
 
         ImageView Img = findViewById(R.id.imageView);
         Picasso.get()
@@ -213,18 +173,17 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         AnswerC.setOnClickListener(this);
         AnswerD.setOnClickListener(this);
 
+
         adView = findViewById(R.id.adView);
         adView.loadAd(ConsentSDK.getAdRequest(this));
+
 
     }
 
 
     public void NextQuestion(int index) {
-        AnswerA.setClickable(true);
-        AnswerB.setClickable(true);
-        AnswerC.setClickable(true);
-        AnswerD.setClickable(true);
 
+        buttonsStatue(true);
 
         if (index < totalQues) {
 
@@ -242,6 +201,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             String Answer4 = question.getAnswer03();
 
             QuestionText.setText(text);
+
             AnswerA.setText(Answer1);
             AnswerB.setText(Answer2);
             AnswerC.setText(Answer3);
@@ -257,6 +217,12 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             }
 
         } else {
+
+            if (score > StageRequir) {
+                new AccessingDB(Playing.this).execute();
+
+            }
+
             Intent done = new Intent(Playing.this, Done.class);
             done.putExtra("Score", score);
             done.putExtra("Stage", Stage);
@@ -264,7 +230,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             countDownTimer.cancel();
             startActivity(done);
             finish();
-            return;
         }
 
     }
@@ -280,25 +245,10 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
 
         if (statue) {
-            //get points from db
-            int points = categoryDbHelper.getPoints(CategoryID);
-            //Add new points
             score += 100;
-            //update db points
-            Category cat = new Category(CategoryID, CategoryName, ImageURL);
-            categoryDbHelper.AddPoints(cat, WinningPrize + points);
-            //wont change
-            //Toast.makeText(this, FinalValues.CorrectToastMessage, Toast.LENGTH_SHORT).show();
-            //Discarded
-
-            int StageRequir = GetStageRequ(Stage);
-
             if (score == StageRequir) {
-                // Show Dialog
                 mDialog.show();
-
             }
-
         } else {
             Wrong.start();
             Souls = Souls - 1;
@@ -320,17 +270,11 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             } else if (Souls == 1) {
                 Heart02.setVisibility(View.INVISIBLE);
             }
-
         }
-
-
     }
 
     public void GetQuestions(final FireStoreCallback callback) {
-
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         db.collection("Questions")
                 .whereEqualTo("categoryID", CategoryID)
                 .whereEqualTo("stage", Stage)
@@ -350,24 +294,31 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                         Collections.shuffle(mQuestions);
                         callback.OnCallBack(mQuestions);
                         totalQues = mQuestions.size();
-
                     }
                 });
     }
 
+    public void buttonsStatue(boolean st) {
+        if (!st) {
+            for (Button item : Buttons) {
+                item.setClickable(false);
+            }
+
+        } else {
+            for (Button item : Buttons) {
+                item.setClickable(true);
+            }
+        }
+    }
 
     @Override
     public void onClick(View v) {
+
         countDownTimer.cancel();
         isRunning = false;
 
         final Button ClickedButton = (Button) v;
-
-        AnswerA.setClickable(false);
-        AnswerB.setClickable(false);
-        AnswerC.setClickable(false);
-        AnswerD.setClickable(false);
-
+        buttonsStatue(false);
 
         ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttonpanding));
 
@@ -376,15 +327,13 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         anim.setStartOffset(20);
         anim.setRepeatMode(Animation.REVERSE);
         anim.setRepeatCount(4);
+
         ClickedButton.startAnimation(anim);
 
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                AnswerA.setClickable(false);
-                AnswerB.setClickable(false);
-                AnswerC.setClickable(false);
-                AnswerD.setClickable(false);
+                buttonsStatue(false);
             }
 
             @Override
@@ -394,11 +343,9 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                 if (ClickedButton.getText().equals(mQuestions.get(index).getCorrectAnswer())) {
                     Correct.start();
 
-
                     ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
 
                     points(true);
-
 
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -416,20 +363,14 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                     points(false);
 
 
-                    final List<Button> Butttons = new ArrayList<>();
-                    Butttons.add(AnswerA);
-                    Butttons.add(AnswerB);
-                    Butttons.add(AnswerC);
-                    Butttons.add(AnswerD);
-
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            for (int i = 0; i < Butttons.size(); i++) {
+                            for (int i = 0; i < Buttons.size(); i++) {
 
-                                if (Butttons.get(i).getText().equals(mQuestions.get(index).getCorrectAnswer())) {
-                                    Butttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
+                                if (Buttons.get(i).getText().equals(mQuestions.get(index).getCorrectAnswer())) {
+                                    Buttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
                                     break;
                                 }
 
@@ -444,15 +385,13 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                         @Override
                         public void run() {
 
-                            for (int i = 0; i < Butttons.size(); i++) {
-                                Butttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybutton));
+                            for (int i = 0; i < Buttons.size(); i++) {
+                                Buttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybutton));
                             }
                             if (!animationView.isAnimating())
-                            NextQuestion(++index);
+                                NextQuestion(++index);
                         }
                     }, 3000);
-
-
                 }
                 TxtScore.setText(String.valueOf(score));
 
@@ -460,13 +399,35 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
             }
         });
-
-
     }
 
+    public int GetStageRequ(int StageID) {
+        switch (StageID) {
+            case 1:
+                return FinalValues.Stage2;
+            case 2:
+                return FinalValues.Stage3;
+            case 3:
+                return FinalValues.Stage4;
+            case 4:
+                return FinalValues.Stage5;
+            case 5:
+                return FinalValues.Stage6;
+            case 6:
+                return FinalValues.Stage7;
+            case 7:
+                return FinalValues.Stage8;
+            case 8:
+                return FinalValues.Stage9;
+            case 9:
+                return FinalValues.Stage10;
+            default:
+                break;
+        }
+        return 0;
+    }
 
     @Override
     protected void onResume() {
@@ -520,30 +481,50 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         void OnCallBack(ArrayList<Question> List);
     }
 
-    public int GetStageRequ(int StageID) {
-        switch (StageID) {
-            case 1:
-                return FinalValues.Stage2;
-            case 2:
-                return FinalValues.Stage3;
-            case 3:
-                return FinalValues.Stage4;
-            case 4:
-                return FinalValues.Stage5;
-            case 5:
-                return FinalValues.Stage6;
-            case 6:
-                return FinalValues.Stage7;
-            case 7:
-                return FinalValues.Stage8;
-            case 8:
-                return FinalValues.Stage9;
-            case 9:
-                return FinalValues.Stage10;
-            default:
-                break;
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && prefs.getBoolean("music", true)) {
+            player.playMusic();
         }
-        return 0;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //Just In case
+        countDownTimer.cancel();
+        Intent A = new Intent(Playing.this, Home.class);
+        startActivity(A);
+        finish();
+
+    }
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        if (prefs.getBoolean("music", true)) {
+            player.pauseMusic();
+        }
+    }
+
+    public class AccessingDB extends AsyncTask<Void, Void, Void> {
+        private final Context mContext;
+
+        public AccessingDB(Context context) {
+            super();
+            this.mContext = context;
+        }
+
+        protected Void doInBackground(Void... params) {
+            // using this.mContext
+            CategoryDbHelper categoryDbHelper = new CategoryDbHelper(mContext);
+            categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, score, 1));
+            categoryDbHelper.UpdateCategoryPoints(CategoryID, score);
+//            categoryDbHelper.UpdateStageStatue(new Stage(Stage, CategoryID, score, 1));
+            return null;
+        }
     }
 
 

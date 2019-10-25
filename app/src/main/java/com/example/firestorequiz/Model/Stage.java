@@ -2,12 +2,9 @@ package com.example.firestorequiz.Model;
 
 import android.content.Context;
 
-import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.DB.CategoryDbHelper;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class Stage {
 
@@ -17,6 +14,15 @@ public class Stage {
     private String Image;
     private int Points;
     private int CategoryID;
+
+    public int getIsOpen() {
+        return isOpen;
+    }
+
+    public void setIsOpen(int isOpen) {
+        this.isOpen = isOpen;
+    }
+
 
     public int getPoints() {
         return Points;
@@ -43,7 +49,8 @@ public class Stage {
         Image = image;
         this.isOpen = isOpen;
     }
-    public Stage(int stageId, int CategoryID,int Points,int isOpen) {
+
+    public Stage(int stageId, int CategoryID, int Points, int isOpen) {
         StageId = stageId;
         this.CategoryID=CategoryID;
         this.Points=Points;

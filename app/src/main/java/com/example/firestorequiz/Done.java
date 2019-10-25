@@ -10,8 +10,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firestorequiz.Constant.FinalValues;
-import com.example.firestorequiz.DB.CategoryDbHelper;
-import com.example.firestorequiz.Model.Stage;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 import com.shreyaspatil.MaterialDialog.MaterialDialog;
 import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
@@ -22,33 +20,10 @@ public class Done extends AppCompatActivity {
     TextView txt_DoneScore;
     ImageView Share, Home;
     SharedPreferences preferences;
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent A = new Intent(Done.this, Home.class);
-        startActivity(A);
-        finish();
-    }
-
-
-    @Override
-    protected void onUserLeaveHint() {
-        super.onUserLeaveHint();
-        player.pauseMusic();
-    }
-
     MediaPlayerPresenter player;
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
+    int Stage, CategoryID, point, StageRequir;
 
-        if (hasFocus && preferences.getBoolean("music", true)) {
-            player.playMusic();
-        }
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,21 +37,17 @@ public class Done extends AppCompatActivity {
         Home = findViewById(R.id.img_home);
 
         preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-        CategoryDbHelper categoryDbHelper = new CategoryDbHelper(this);
 
         Intent a = getIntent();
 
-        int point = a.getIntExtra("Score", 0);
-        final int Stage = a.getIntExtra("Stage", 8);
-        int CategoryID = a.getIntExtra("CategoryID", 8);
+        point = a.getIntExtra("Score", 0);
+        Stage = a.getIntExtra("Stage", 8);
+        CategoryID = a.getIntExtra("CategoryID", 8);
 
 
-        int StageRequir = GetStageRequ(Stage);
+        StageRequir = GetStageRequ(Stage);
 
-        if (point >= StageRequir) {
-            categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, 0, 1));
-            categoryDbHelper.UpdateStageStatue(new Stage(Stage, CategoryID, point, 1));
-        } else {
+        if (point < StageRequir) {
             MaterialDialog mDialog = new MaterialDialog.Builder(this)
                     .setTitle("Replay The Stage")
                     .setMessage("Play Again?")
@@ -106,7 +77,6 @@ public class Done extends AppCompatActivity {
             // Show Dialog
             mDialog.show();
         }
-
 
 
         Share.setOnClickListener(new View.OnClickListener() {
@@ -160,4 +130,32 @@ public class Done extends AppCompatActivity {
         }
         return 0;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent A = new Intent(Done.this, Home.class);
+        startActivity(A);
+        finish();
+    }
+
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        player.pauseMusic();
+    }
+
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus && preferences.getBoolean("music", true)) {
+            player.playMusic();
+        }
+
+    }
+
+
 }

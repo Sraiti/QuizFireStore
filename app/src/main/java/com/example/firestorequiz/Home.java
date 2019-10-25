@@ -27,6 +27,7 @@ import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.formats.MediaView;
@@ -71,6 +72,10 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+
+        MobileAds.initialize(this,
+                getString(R.string.app_id));
 
         Play = findViewById(R.id.img_Play);
         More = findViewById(R.id.img_more);

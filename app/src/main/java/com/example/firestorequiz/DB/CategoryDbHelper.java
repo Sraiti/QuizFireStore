@@ -59,12 +59,10 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
 
         String UpdateQuery =
                 "UPDATE " + CategoryTable.TableName + " SET " +
-                        CategoryTable.CategoryPoints + " = " + Points +
+                        CategoryTable.CategoryPoints + " = " +
+                        CategoryTable.CategoryPoints + "+" + Points +
                         "\nWHERE  " + CategoryTable.CategoryID + "=" + CategoryID + ";";
-
         db.execSQL(UpdateQuery);
-
-
     }
 
     public void InsertCategoryPoints(Category Cat) {
@@ -104,7 +102,7 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
     }
 
 
-    public void AddPoints(Category Category, int Point) {
+    public void AddCategories(Category Category) {
 
         db = getReadableDatabase();
         String QuerygetPoints = "SELECT  " + CategoryTable.CategoryPoints +
@@ -113,9 +111,7 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(QuerygetPoints, null);
 
-        if (c.moveToFirst()) {
-            UpdateCategoryPoints(Category.getCategoryId(), Point);
-        } else if (!c.moveToFirst()) {
+        if (!c.moveToFirst()) {
             InsertCategoryPoints(Category);
         }
         c.close();
