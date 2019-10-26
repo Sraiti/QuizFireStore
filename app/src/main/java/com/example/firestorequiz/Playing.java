@@ -165,15 +165,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             }
         });
 
-        AnswerA.setOnClickListener(this);
-        AnswerB.setOnClickListener(this);
-        AnswerC.setOnClickListener(this);
-        AnswerD.setOnClickListener(this);
-
-
-        adView = findViewById(R.id.adView);
-        adView.loadAd(ConsentSDK.getAdRequest(this));
-
 
         mDialog.setOnShowListener(new OnShowListener() {
             @Override
@@ -189,10 +180,22 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                 new AccessingDB(Playing.this).execute();
                 circularProgress.setCurrentProgress(0);
                 ProgressValue = 0;
+
                 countDownTimer.start();
                 isRunning = true;
             }
         });
+
+        AnswerA.setOnClickListener(this);
+        AnswerB.setOnClickListener(this);
+        AnswerC.setOnClickListener(this);
+        AnswerD.setOnClickListener(this);
+
+
+        adView = findViewById(R.id.adView);
+        adView.loadAd(ConsentSDK.getAdRequest(this));
+
+
     }
 
 
@@ -225,6 +228,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             try {
                 if (!isRunning) {
                     countDownTimer.start();
+                    isRunning = true;
                 }
 
             } catch (Exception Ex) {
@@ -448,17 +452,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
 
-
-        mDialog.setOnShowListener(new OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                countDownTimer.cancel();
-                isRunning = false;
-                ProgressValue = 0;
-            }
-        });
-
-
         countDownTimer = new CountDownTimer(TIMEOUT, INTERVAL) {
 
             @Override
@@ -535,7 +528,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         protected Void doInBackground(Void... params) {
             // using this.mContext
             CategoryDbHelper categoryDbHelper = new CategoryDbHelper(mContext);
-            categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, score, 1));
+            categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, 0, 1));
             categoryDbHelper.UpdateCategoryPoints(CategoryID, score);
 //            categoryDbHelper.UpdateStageStatue(new Stage(Stage, CategoryID, score, 1));
             return null;
