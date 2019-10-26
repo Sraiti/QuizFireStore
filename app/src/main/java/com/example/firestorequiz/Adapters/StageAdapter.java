@@ -10,8 +10,8 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.firestorequiz.Activities.Playing;
 import com.example.firestorequiz.Model.Stage;
-import com.example.firestorequiz.Playing;
 import com.example.firestorequiz.R;
 import com.example.firestorequiz.ViewHolders.StageViewHolder;
 

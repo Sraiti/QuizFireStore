@@ -1,4 +1,4 @@
-package com.example.firestorequiz;
+package com.example.firestorequiz.Activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.firestorequiz.DB.CategoryDbHelper;
 import com.example.firestorequiz.Model.Category;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
+import com.example.firestorequiz.R;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;

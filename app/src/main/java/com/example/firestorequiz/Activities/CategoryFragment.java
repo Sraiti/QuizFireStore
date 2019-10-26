@@ -1,4 +1,4 @@
-package com.example.firestorequiz;
+package com.example.firestorequiz.Activities;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firestorequiz.Adapters.CategoryAdapter;
+import com.example.firestorequiz.R;
 
 import java.util.List;
 

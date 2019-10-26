@@ -1,4 +1,4 @@
-package com.example.firestorequiz;
+package com.example.firestorequiz.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
+import com.example.firestorequiz.R;
 import com.shreyaspatil.MaterialDialog.MaterialDialog;
 import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
 

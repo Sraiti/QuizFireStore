@@ -1,4 +1,4 @@
-package com.example.firestorequiz;
+package com.example.firestorequiz.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.firestorequiz.Adapters.StageAdapter;
 import com.example.firestorequiz.Model.Stage;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
+import com.example.firestorequiz.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

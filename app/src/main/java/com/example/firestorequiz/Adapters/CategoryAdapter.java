@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.firestorequiz.Activities.Quiz;
 import com.example.firestorequiz.Model.Category;
-import com.example.firestorequiz.Quiz;
 import com.example.firestorequiz.R;
 import com.example.firestorequiz.ViewHolders.CategoryViewHolder;
 import com.example.firestorequiz.ViewHolders.UnifiedNativeAdViewHolder;

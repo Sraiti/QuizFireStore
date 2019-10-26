@@ -1,4 +1,4 @@
-package com.example.firestorequiz;
+package com.example.firestorequiz.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +26,7 @@ import com.example.firestorequiz.DB.CategoryDbHelper;
 import com.example.firestorequiz.Model.Question;
 import com.example.firestorequiz.Model.Stage;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
+import com.example.firestorequiz.R;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

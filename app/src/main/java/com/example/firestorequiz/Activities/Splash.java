@@ -1,10 +1,12 @@
-package com.example.firestorequiz;
+package com.example.firestorequiz.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.firestorequiz.R;
 
 public class Splash extends AppCompatActivity {
 

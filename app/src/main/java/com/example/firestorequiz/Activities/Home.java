@@ -1,4 +1,4 @@
-package com.example.firestorequiz;
+package com.example.firestorequiz.Activities;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.firestorequiz.Ads.ConsentSDK;
 import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
+import com.example.firestorequiz.R;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.MobileAds;

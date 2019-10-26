@@ -1,4 +1,4 @@
-package com.example.firestorequiz;
+package com.example.firestorequiz.Activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import com.example.firestorequiz.Adapters.ScoreAdapter;
 import com.example.firestorequiz.DB.CategoryDbHelper;
 import com.example.firestorequiz.Model.Category;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
+import com.example.firestorequiz.R;
 
 import java.util.ArrayList;
 

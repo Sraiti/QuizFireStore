@@ -14,17 +14,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ScoreBoard" />
+        <activity android:name=".Activities.ScoreBoard" />
         <activity
-            android:name=".Done"
+            android:name=".Activities.Done"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge"
              />
         <activity
-            android:name=".Home"
+            android:name=".Activities.Home"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Splash"
+            android:name=".Activities.Splash"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,19 +34,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Playing"
+            android:name=".Activities.Playing"
             android:screenOrientation="portrait"
 
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge"/>
         <activity
-            android:name=".Quiz"
+            android:name=".Activities.Quiz"
             android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id" />
 
-        <activity android:name=".MainActivity" />
+        <activity android:name=".Activities.MainActivity" />
 
     </application>
 
