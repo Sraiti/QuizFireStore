@@ -172,12 +172,11 @@ public class CategoryDbHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(QuerygetStatue, null);
 
         if (c.moveToFirst()) {
-            // UpdateStageStatue(stage);
+            UpdateStageStatue(stage);
         } else if (!c.moveToFirst()) {
             InsertStageStatue(stage);
         }
         c.close();
-
     }
 
 

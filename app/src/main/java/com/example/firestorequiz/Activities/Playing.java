@@ -46,7 +46,7 @@ import java.util.List;
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 
 
-public class Playing extends AppCompatActivity implements View.OnClickListener {
+public class Playing extends AppCompatActivity implements View.OnClickListener, OnDismissListener, OnShowListener {
 
 
     public ArrayList<Question> mQuestions = new ArrayList<>();
@@ -59,6 +59,8 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     TextView QuestionText, TxtScore;
     Button AnswerA, AnswerB, AnswerC, AnswerD;
     ImageView Heart01, Heart02, Heart03;
+
+    Animation PandingAnim;
 
     int ProgressValue = 0;
     int index = 0, score = 0, totalQues, Souls = 3;
@@ -106,6 +108,18 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         circularProgress.setMaxProgress(15);
 
 
+        ///Animations
+        PandingAnim = new AlphaAnimation(0.0f, 1.0f);
+        PandingAnim.setDuration(200); //You can manage the blinking time with this parameter
+        PandingAnim.setStartOffset(20);
+        PandingAnim.setRepeatMode(Animation.REVERSE);
+        PandingAnim.setRepeatCount(4);
+
+
+
+
+
+
         prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = prefs.edit();
         editor.apply();
@@ -149,6 +163,8 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                 .setAnimation(R.raw.unlocking)
                 .build();
 
+        mDialog.setOnShowListener(this);
+        mDialog.setOnDismissListener(this);
 
         animationView = mDialog.getAnimationView();
 
@@ -167,26 +183,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
         });
 
 
-        mDialog.setOnShowListener(new OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                countDownTimer.cancel();
-                isRunning = false;
-
-            }
-        });
-        mDialog.setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                new AccessingDB(Playing.this).execute();
-                circularProgress.setCurrentProgress(0);
-                ProgressValue = 0;
-
-                countDownTimer.start();
-                isRunning = true;
-            }
-        });
-
         AnswerA.setOnClickListener(this);
         AnswerB.setOnClickListener(this);
         AnswerC.setOnClickListener(this);
@@ -203,28 +199,17 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     public void NextQuestion(int index) {
 
         buttonsStatue(true);
-
         if (index < totalQues) {
-
-
             circularProgress.setCurrentProgress(0);
             ProgressValue = 0;
 
-
             Question question = mQuestions.get(index);
 
-            String text = question.getQuestion();
-            String Answer1 = question.getAnswer0();
-            String Answer2 = question.getAnswer01();
-            String Answer3 = question.getAnswer02();
-            String Answer4 = question.getAnswer03();
-
-            QuestionText.setText(text);
-
-            AnswerA.setText(Answer1);
-            AnswerB.setText(Answer2);
-            AnswerC.setText(Answer3);
-            AnswerD.setText(Answer4);
+            QuestionText.setText(question.getQuestion());
+            AnswerA.setText(question.getAnswer0());
+            AnswerB.setText(question.getAnswer01());
+            AnswerC.setText(question.getAnswer02());
+            AnswerD.setText(question.getAnswer03());
 
             try {
                 if (!isRunning) {
@@ -262,9 +247,8 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
 
     public void points(boolean statue) {
-
-
         if (statue) {
+            Correct.start();
             score += 100;
             if (score == StageRequir) {
                 mDialog.show();
@@ -319,20 +303,14 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
     }
 
     public void buttonsStatue(boolean st) {
-        if (!st) {
-            for (Button item : Buttons) {
-                item.setClickable(false);
-            }
-
-        } else {
-            for (Button item : Buttons) {
-                item.setClickable(true);
-            }
+        for (Button item : Buttons) {
+            item.setClickable(st);
         }
     }
 
     @Override
     public void onClick(View v) {
+
 
         countDownTimer.cancel();
         isRunning = false;
@@ -342,15 +320,9 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
 
         ClickedButton.setBackground(getResources().getDrawable(R.drawable.mybuttonpanding));
 
-        Animation anim = new AlphaAnimation(0.0f, 1.0f);
-        anim.setDuration(250); //You can manage the blinking time with this parameter
-        anim.setStartOffset(20);
-        anim.setRepeatMode(Animation.REVERSE);
-        anim.setRepeatCount(4);
+        ClickedButton.startAnimation(PandingAnim);
 
-        ClickedButton.startAnimation(anim);
-
-        anim.setAnimationListener(new Animation.AnimationListener() {
+        PandingAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 buttonsStatue(false);
@@ -387,14 +359,15 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            for (int i = 0; i < Buttons.size(); i++) {
-
-                                if (Buttons.get(i).getText().equals(mQuestions.get(index).getCorrectAnswer())) {
-                                    Buttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
-                                    break;
-                                }
-
-                            }
+//                            for (int i = 0; i < Buttons.size(); i++) {
+//
+//                                if (Buttons.get(i).getText().equals(mQuestions.get(index).getCorrectAnswer())) {
+//                                    Buttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
+//                                    break;
+//                                }
+//
+//                            }
+                            ColorIt();
                         }
                     }, 1000);
 
@@ -421,6 +394,14 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
             public void onAnimationRepeat(Animation animation) {
             }
         });
+    }
+
+    private void ColorIt() {
+        for (Button item : Buttons) {
+            if (item.getText().equals(mQuestions.get(index).getCorrectAnswer())) {
+                item.setBackground(getResources().getDrawable(R.drawable.mybuttoncorret));
+            }
+        }
     }
 
     public int GetStageRequ(int StageID) {
@@ -484,6 +465,23 @@ public class Playing extends AppCompatActivity implements View.OnClickListener {
                 }
             }
         };
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialogInterface) {
+        new AccessingDB(Playing.this).execute();
+        circularProgress.setCurrentProgress(0);
+        ProgressValue = 0;
+
+        countDownTimer.start();
+        isRunning = true;
+    }
+
+    @Override
+    public void onShow(DialogInterface dialogInterface) {
+        countDownTimer.cancel();
+        isRunning = false;
+
     }
 
     private interface FireStoreCallback {
