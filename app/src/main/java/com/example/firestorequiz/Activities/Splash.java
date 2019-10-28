@@ -6,12 +6,13 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.firestorequiz.Ads.ConsentSDK;
 import com.example.firestorequiz.R;
 
 public class Splash extends AppCompatActivity {
 
 
-//    ConsentSDK consentSDK;
+    ConsentSDK consentSDK;
 
 
     @Override
@@ -20,17 +21,17 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         final Intent intent = new Intent(Splash.this, Home.class);
 
-//        consentSDK = new ConsentSDK.Builder(this)
-//                .addPrivacyPolicy(getString(R.string.url_privacy)) // Add your privacy policy url
-//                .addPublisherId(getString(R.string.publisher_id)) // Add your admob publisher id
-//                .build();
-//
-//        consentSDK.checkConsent(new ConsentSDK.ConsentCallback() {
-//            @Override
-//            public void onResult(boolean isRequestLocationInEeaOrUnknown) {
-//
-//            }
-//        });
+        consentSDK = new ConsentSDK.Builder(this)
+                .addPrivacyPolicy(getString(R.string.url_privacy)) // Add your privacy policy url
+                .addPublisherId(getString(R.string.publisher_id)) // Add your admob publisher id
+                .build();
+
+        consentSDK.checkConsent(new ConsentSDK.ConsentCallback() {
+            @Override
+            public void onResult(boolean isRequestLocationInEeaOrUnknown) {
+
+            }
+        });
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

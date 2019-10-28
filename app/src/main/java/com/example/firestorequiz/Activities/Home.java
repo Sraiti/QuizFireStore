@@ -10,6 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -23,6 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firestorequiz.Ads.ConsentSDK;
+import com.example.firestorequiz.BuildConfig;
 import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 import com.example.firestorequiz.R;
@@ -48,6 +52,7 @@ public class Home extends AppCompatActivity {
 
     MediaPlayerPresenter player;
     SharedPreferences preferences;
+    ConsentSDK consentSDK;
     SharedPreferences.Editor editor;
 
     @Override
@@ -69,6 +74,97 @@ public class Home extends AppCompatActivity {
         player.pauseMusic();
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.privacy: {
+                String url = getString(R.string.url_privacy);
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                try {
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                } catch (Exception e) {
+                }
+            }
+            case R.id.share: {
+                try {
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+                    String shareMessage = "\nLet me recommend you this application\n\n";
+                    shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "\n\n";
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                    startActivity(Intent.createChooser(shareIntent, "choose one"));
+                } catch (Exception e) {
+                    //e.toString();
+                }
+                break;
+            }
+
+            case R.id.apps: {
+                try {
+                    Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://play.google.com/store/apps/details?id="
+                                    + getPackageName())));
+                }
+                break;
+            }
+
+            case R.id.rate: {
+                try {
+                    Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://play.google.com/store/apps/details?id="
+                                    + getPackageName())));
+                }
+                break;
+            }
+            case R.id.action_gdbr: {
+                changegdpr(this);
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void changegdpr(final Context context) {
+        consentSDK.requestConsent(new ConsentSDK.ConsentStatusCallback() {
+            @Override
+            public void onResult(boolean isRequestLocationInEeaOrUnknown, int isConsentPersonalized) {
+                // Your code after the consent is submitted if needed
+                consentSDK = new ConsentSDK.Builder(context)
+                        .addTestDeviceId("your device id from logcat") // Add your test device id "Remove addTestDeviceId on production!"
+                        .addCustomLogTag("CUSTOM_TAG") // Add custom tag default: ID_LOG
+                        .addPrivacyPolicy(getString(R.string.url_privacy)) // Add your privacy policy url
+                        .addPublisherId(getString(R.string.publisher_id)) // Add your admob publisher id
+                        .build();
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+
+
+        return true;
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +173,17 @@ public class Home extends AppCompatActivity {
 
         MobileAds.initialize(this,
                 getString(R.string.app_id));
+
+        consentSDK = new ConsentSDK.Builder(this)
+                .addPrivacyPolicy(getResources().getString(R.string.url_privacy)) // Add your privacy policy url
+                .addPublisherId(getResources().getString(R.string.publisher_id)) // Add your admob publisher id
+                .build();
+        consentSDK.checkConsent(new ConsentSDK.ConsentCallback() {
+            @Override
+            public void onResult(boolean isRequestLocationInEeaOrUnknown) {
+
+            }
+        });
 
         Play = findViewById(R.id.img_Play);
         More = findViewById(R.id.img_more);

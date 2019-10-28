@@ -28,5 +28,7 @@
 
     <string name="ad_attribution"  translatable="false">Ad</string>
     <string name="dialog_close_msg">Are you sure you want to quit?</string>
+    <string name="search">search</string>
+    <string name="gdbr">gdpr</string>
 
 </resources>

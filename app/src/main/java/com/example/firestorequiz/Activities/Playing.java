@@ -145,7 +145,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener, 
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
 
-                        new AccessingDB(Playing.this).execute();
+                        new AccessingDB(Playing.this, score).execute();
                         Intent intent2 = new Intent(Playing.this, Quiz.class);
                         intent2.putExtra("CategoryId", CategoryID);
                         intent2.putExtra("CategoryName", CategoryName);
@@ -224,7 +224,8 @@ public class Playing extends AppCompatActivity implements View.OnClickListener, 
         } else {
 
             if (score > StageRequir) {
-                new AccessingDB(Playing.this).execute();
+
+                new AccessingDB(Playing.this, score - StageRequir).execute();
 
             }
 
@@ -469,7 +470,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener, 
 
     @Override
     public void onDismiss(DialogInterface dialogInterface) {
-        new AccessingDB(Playing.this).execute();
+        new AccessingDB(Playing.this, score).execute();
         circularProgress.setCurrentProgress(0);
         ProgressValue = 0;
 
@@ -518,17 +519,20 @@ public class Playing extends AppCompatActivity implements View.OnClickListener, 
 
     public class AccessingDB extends AsyncTask<Void, Void, Void> {
         private final Context mContext;
+        private int Score;
 
-        public AccessingDB(Context context) {
+        public AccessingDB(Context context, int Score) {
             super();
             this.mContext = context;
+            this.Score = Score;
+
         }
 
         protected Void doInBackground(Void... params) {
             // using this.mContext
             CategoryDbHelper categoryDbHelper = new CategoryDbHelper(mContext);
             categoryDbHelper.AddStage(new Stage(1 + Stage, CategoryID, 0, 1));
-            categoryDbHelper.UpdateCategoryPoints(CategoryID, score);
+            categoryDbHelper.UpdateCategoryPoints(CategoryID, Score);
 //            categoryDbHelper.UpdateStageStatue(new Stage(Stage, CategoryID, score, 1));
             return null;
         }

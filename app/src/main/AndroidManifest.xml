@@ -22,7 +22,9 @@
              />
         <activity
             android:name=".Activities.Home"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".Activities.Splash"
             android:screenOrientation="portrait">
