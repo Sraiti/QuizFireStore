@@ -128,7 +128,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener, 
         CategoryName = prefs.getString(String.valueOf(R.string.CategoryName_key), "");
         CategoryID = prefs.getInt(String.valueOf(R.string.CategoryId_key), 8);
         Intent a = getIntent();
-        Stage = a.getIntExtra("Level", 8);
+        Stage = a.getIntExtra("Level", 9);
 
         StageRequir = GetStageRequ(Stage);
 
