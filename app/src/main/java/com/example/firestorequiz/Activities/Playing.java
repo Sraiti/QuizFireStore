@@ -474,6 +474,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener, 
         circularProgress.setCurrentProgress(0);
         ProgressValue = 0;
 
+        buttonsStatue(true);
         countDownTimer.start();
         isRunning = true;
     }

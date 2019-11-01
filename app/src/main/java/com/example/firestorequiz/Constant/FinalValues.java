@@ -9,7 +9,7 @@ public class FinalValues {
     ///How Many points Gain For every Correct Question
     public static int WinningPrize = 100;
     //How Many points is required to open each stage
-    public static int Stage2 = 500;
+    public static int Stage2 = 200;
     public static int Stage3 = 700;
     public static int Stage4 = 900;
     public static int Stage5 = 1200;
