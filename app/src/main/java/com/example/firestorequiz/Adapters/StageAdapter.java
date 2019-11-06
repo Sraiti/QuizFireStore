@@ -11,9 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firestorequiz.Activities.Playing;
+import com.example.firestorequiz.Ads.ads;
 import com.example.firestorequiz.Model.Stage;
 import com.example.firestorequiz.R;
 import com.example.firestorequiz.ViewHolders.StageViewHolder;
+import com.google.android.gms.ads.AdListener;
 
 import java.util.List;
 
@@ -25,12 +27,16 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     List<Stage> StageDataList;
     ProgressBar progressBar;
     int CateID;
+    ads _ads;
 
     public StageAdapter(List<Stage> studentDataList, Context context, int CategoryID, ProgressBar progressBar) {
         this.mContext = context;
         this.StageDataList = studentDataList;
         this.CateID = CategoryID;
         this.progressBar = progressBar;
+        _ads = ads.getInstance(context);
+        _ads.loadInter();
+
     }
 
     @NonNull
@@ -80,14 +86,28 @@ public class StageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final Intent intent2 = new Intent(mContext, Playing.class);
+                intent2.putExtra("Level", StageDataList.get(position).getStageId());
+                _ads.interstitialAdInstence().setAdListener(new AdListener() {
+                    @Override
+                    public void onAdClosed() {
+                        if (StageDataList.get(position).isOpen() == 1) {
 
-                if (StageDataList.get(position).isOpen() == 1) {
-                    Intent intent2 = new Intent(mContext, Playing.class);
-                    intent2.putExtra("Level", StageDataList.get(position).getStageId());
-                    mContext.startActivity(intent2);
-                } else {
-                    //Toast.makeText(mContext, "You don't have enough points !!", Toast.LENGTH_SHORT).show();
-                }
+                            mContext.startActivity(intent2);
+                        }
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(int i) {
+                        if (StageDataList.get(position).isOpen() == 1) {
+
+                            mContext.startActivity(intent2);
+                        }
+                    }
+                });
+                _ads.showads();
+
+
 
 
             }
