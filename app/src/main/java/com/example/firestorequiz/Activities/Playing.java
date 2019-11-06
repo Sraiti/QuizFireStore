@@ -21,12 +21,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.firestorequiz.Ads.ConsentSDK;
+import com.example.firestorequiz.Ads.ads;
 import com.example.firestorequiz.Constant.FinalValues;
 import com.example.firestorequiz.DB.CategoryDbHelper;
 import com.example.firestorequiz.Model.Question;
 import com.example.firestorequiz.Model.Stage;
 import com.example.firestorequiz.MusicBackground.MediaPlayerPresenter;
 import com.example.firestorequiz.R;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -62,6 +64,8 @@ public class Playing extends AppCompatActivity implements View.OnClickListener, 
 
     Animation PandingAnim;
 
+    ads _ads;
+
     int ProgressValue = 0;
     int index = 0, score = 0, totalQues, Souls = 3;
     boolean isRunning;
@@ -85,10 +89,23 @@ public class Playing extends AppCompatActivity implements View.OnClickListener, 
 
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            countDownTimer.cancel();
+            isRunning = false;
+        } catch (Exception ex) {
+        }
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playing);
 
+        _ads = ads.getInstance(this);
+        _ads.loadInter();
 
         QuestionText = findViewById(R.id.txt_Ques);
         AnswerA = findViewById(R.id.btn_Answer1);
@@ -114,10 +131,6 @@ public class Playing extends AppCompatActivity implements View.OnClickListener, 
         PandingAnim.setStartOffset(20);
         PandingAnim.setRepeatMode(Animation.REVERSE);
         PandingAnim.setRepeatCount(4);
-
-
-
-
 
 
         prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
@@ -233,6 +246,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener, 
             done.putExtra("Score", score);
             done.putExtra("Stage", Stage);
             done.putExtra("CategoryID", CategoryID);
+
             countDownTimer.cancel();
             startActivity(done);
             finish();
@@ -259,15 +273,35 @@ public class Playing extends AppCompatActivity implements View.OnClickListener, 
             Souls = Souls - 1;
             if (Souls <= 0) {
                 Heart03.setVisibility(View.INVISIBLE);
-                if (countDownTimer != null)
-                    countDownTimer.cancel();
-                Intent done = new Intent(Playing.this, Done.class);
+
+
+                final Intent done = new Intent(Playing.this, Done.class);
                 done.putExtra("Score", score);
                 done.putExtra("CategoryID", CategoryID);
                 done.putExtra("Stage", Stage);
-                startActivity(done);
-                finish();
-                return;
+
+
+                _ads.interstitialAdInstence().setAdListener(new AdListener() {
+                    @Override
+                    public void onAdClosed() {
+                        startActivity(done);
+                        finish();
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(int i) {
+                        startActivity(done);
+                        finish();
+                    }
+
+
+                    @Override
+                    public void onAdOpened() {
+                        countDownTimer.cancel();
+                        isRunning = false;
+                    }
+                });
+                _ads.showads();
             }
 
             if (Souls == 2) {
@@ -382,7 +416,7 @@ public class Playing extends AppCompatActivity implements View.OnClickListener, 
                             for (int i = 0; i < Buttons.size(); i++) {
                                 Buttons.get(i).setBackground(getResources().getDrawable(R.drawable.mybutton));
                             }
-                            if (!animationView.isAnimating())
+                            if (!animationView.isAnimating() && Souls > 0)
                                 NextQuestion(++index);
                         }
                     }, 3000);
